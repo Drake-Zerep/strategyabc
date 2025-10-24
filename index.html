@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokerStrategy Pro - Juego Postflop</title>
+    <title>PokerStrategy Pro - Juego Preflop y Postflop</title>
     <style>
         :root {
             --primary: #1a1a2e;
@@ -337,6 +337,51 @@
             font-size: 0.9rem;
         }
         
+        .table-diagram {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+        }
+        
+        .table-diagram img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .position-marker {
+            position: absolute;
+            background-color: var(--highlight);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .position-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .position-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .position-card h4 {
+            color: var(--highlight);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
         footer {
             background-color: var(--secondary);
             padding: 3rem 0;
@@ -398,6 +443,10 @@
             .cards-container {
                 grid-template-columns: 1fr;
             }
+            
+            .position-info {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -408,11 +457,11 @@
                 <a href="#" class="logo">Poker<span>Strategy</span> Pro</a>
                 <nav>
                     <ul>
-                        <li><a href="#" class="active">Postflop</a></li>
-                        <li><a href="#">Preflop</a></li>
-                        <li><a href="#">Turn & River</a></li>
-                        <li><a href="#">Calculadoras</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="#preflop" class="active">Preflop</a></li>
+                        <li><a href="#postflop">Postflop</a></li>
+                        <li><a href="#turn-river">Turn & River</a></li>
+                        <li><a href="#calculadoras">Calculadoras</a></li>
+                        <li><a href="#blog">Blog</a></li>
                     </ul>
                 </nav>
             </div>
@@ -421,13 +470,128 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Dominio del Juego Postflop</h1>
-            <p>Aprende estrategias avanzadas para tomar decisiones óptimas después del flop y maximizar tus ganancias en cada mano.</p>
-            <a href="#estrategia" class="btn">Explorar Estrategias</a>
+            <h1>Dominio del Juego Preflop y Postflop</h1>
+            <p>Aprende estrategias avanzadas para tomar decisiones óptimas en cada fase del juego y maximizar tus ganancias en cada mano.</p>
+            <a href="#preflop" class="btn">Explorar Estrategias</a>
         </div>
     </section>
 
-    <section id="estrategia" class="section">
+    <section id="preflop" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Introducción al Juego Preflop</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Conceptos Básicos del Juego Preflop</h3>
+                </div>
+                <div class="card-body">
+                    <p>El juego preflop significa todo el desarrollo del juego antes de ver el flop, antes de ver las cartas comunitarias. Es fundamental tener una estrategia básica sólida, jugando como jugadores sin datos específicos, sin usar software de apoyo como HUDs o trackers.</p>
+                    
+                    <div class="example">
+                        <strong>Enfoque:</strong> Jugaremos pocas manos pero muy fuertes en general, priorizando la calidad sobre la cantidad.
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Posiciones en una Mesa de 6 Jugadores</h4>
+                    
+                    <div class="table-diagram">
+                        <div style="background: var(--accent); border-radius: 10px; padding: 2rem; position: relative; height: 300px;">
+                            <!-- Mesa de poker visual -->
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 100px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text);">
+                                MESA
+                            </div>
+                            
+                            <!-- Posiciones -->
+                            <div class="position-marker" style="top: 20px; left: 50%; transform: translateX(-50%);">BU</div>
+                            <div class="position-marker" style="top: 50%; right: 20px; transform: translateY(-50%);">CO</div>
+                            <div class="position-marker" style="top: 50%; left: 20px; transform: translateY(-50%);">UTG</div>
+                            <div class="position-marker" style="bottom: 60px; left: 30%;">MP</div>
+                            <div class="position-marker" style="bottom: 60px; right: 30%;">HJ</div>
+                            <div class="position-marker" style="bottom: 20px; left: 50%; transform: translateX(-50%);">SB</div>
+                        </div>
+                    </div>
+                    
+                    <div class="position-info">
+                        <div class="position-card">
+                            <h4>UTG (Under The Gun)</h4>
+                            <p>Primera posición en actuar postflop. Juego muy ajustado, solo manos premium.</p>
+                        </div>
+                        <div class="position-card">
+                            <h4>MP (Middle Position)</h4>
+                            <p>Mayor flexibilidad que UTG, pero aún juego conservador.</p>
+                        </div>
+                        <div class="position-card">
+                            <h4>HJ (Hijack)</h4>
+                            <p>Posición favorable, permite abrir más manos.</p>
+                        </div>
+                        <div class="position-card">
+                            <h4>CO (Cutoff)</h4>
+                            <p>Una de las mejores posiciones, amplio rango de apertura.</p>
+                        </div>
+                        <div class="position-card">
+                            <h4>BU (Button)</h4>
+                            <p>Mejor posición, última en actuar en todas las calles postflop.</p>
+                        </div>
+                        <div class="position-card">
+                            <h4>SB/BB (Ciegas)</h4>
+                            <p>Defensa amplia desde BB, juego ajustado desde SB.</p>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Rangos de Apertura por Posición</h4>
+                    
+                    <table class="strategy-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Rango de Apertura</th>
+                                <th>Ejemplos de Manos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>UTG</td>
+                                <td>8-10%</td>
+                                <td>JJ+, AK, AQs</td>
+                            </tr>
+                            <tr>
+                                <td>MP</td>
+                                <td>12-15%</td>
+                                <td>99+, AJ+, KQ</td>
+                            </tr>
+                            <tr>
+                                <td>HJ</td>
+                                <td>18-20%</td>
+                                <td>77+, AT+, KJ+, QJs</td>
+                            </tr>
+                            <tr>
+                                <td>CO</td>
+                                <td>25-30%</td>
+                                <td>55+, A8+, KT+, Q10+, J10s</td>
+                            </tr>
+                            <tr>
+                                <td>BU</td>
+                                <td>40-50%</td>
+                                <td>22+, A2+, K8+, Q9+, J9+, T9s</td>
+                            </tr>
+                            <tr>
+                                <td>SB</td>
+                                <td>15-20%</td>
+                                <td>66+, A7+, K9+, Q10+, J10s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="example">
+                        <strong>Nota:</strong> Estos rangos son una guía general y deben ajustarse según la dinámica de la mesa, los stacks y los perfiles de los oponentes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="postflop" class="section" style="background-color: var(--secondary);">
         <div class="container">
             <div class="section-title">
                 <h2>Tipos de Manos Postflop</h2>
@@ -481,7 +645,7 @@
         </div>
     </section>
 
-    <section class="section" style="background-color: var(--secondary);">
+    <section class="section">
         <div class="container">
             <div class="section-title">
                 <h2>Apuesta de Continuación (CB)</h2>
@@ -539,67 +703,7 @@
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Respuesta a un Raise a Nuestra CB</h2>
-            </div>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Manos con las que Pagamos</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Pagamos con manos que pueden mejorar en el Turn para ganar a un Set:</p>
-                        <ul>
-                            <li><strong>Dobles Parejas:</strong> <span class="hand">Q♣ T♣</span> en <span class="board">Q♦ T♠ 8♣</span></li>
-                            <li><strong>Overpairs:</strong> <span class="hand">K♦ K♠</span> en <span class="board">J♣ 6♣ 4♦</span></li>
-                            <li><strong>Proyectos:</strong> <span class="hand">A♥ T♥</span> en <span class="board">J♣ 8♥ 7♥</span></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Manos con las que Foldeamos</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Foldeamos inmediatamente con:</p>
-                        <ul>
-                            <li>Todo lo inferior a dobles parejas</li>
-                            <li>Top Par, sin importar el kicker</li>
-                        </ul>
-                        <div class="example">
-                            <strong>Ejemplo:</strong><br>
-                            <span class="hand">A♠ K♦</span> en <span class="board">K♠ 9♥ 8♣</span> → Foldeamos ante un raise
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Manos con las que Re-subimos</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Re-subimos y pagamos All-In con:</p>
-                        <ul>
-                            <li>Sets fuertes (dependiendo del board)</li>
-                            <li>Escaleras</li>
-                            <li>Colores</li>
-                            <li>Full Houses</li>
-                        </ul>
-                        <div class="example">
-                            <strong>Ejemplo:</strong><br>
-                            <span class="hand">8♥ 8♠</span> en <span class="board">T♠ 8♣ 3♦</span> → Set fuerte
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" style="background-color: var(--secondary);">
+    <section id="turn-river" class="section" style="background-color: var(--secondary);">
         <div class="container">
             <div class="section-title">
                 <h2>Juego en el Turn y River</h2>
@@ -654,11 +758,11 @@
                 <div class="footer-logo">PokerStrategy Pro</div>
                 <p>Tu guía definitiva para dominar el póker</p>
                 <div class="footer-links">
-                    <a href="#">Inicio</a>
-                    <a href="#">Preflop</a>
-                    <a href="#">Postflop</a>
-                    <a href="#">Turn & River</a>
-                    <a href="#">Contacto</a>
+                    <a href="#preflop">Preflop</a>
+                    <a href="#postflop">Postflop</a>
+                    <a href="#turn-river">Turn & River</a>
+                    <a href="#calculadoras">Calculadoras</a>
+                    <a href="#blog">Blog</a>
                 </div>
                 <div class="copyright">
                     &copy; 2023 PokerStrategy Pro. Todos los derechos reservados.
@@ -702,11 +806,33 @@
         }, observerOptions);
         
         // Aplicar a las tarjetas y pasos del flujo
-        document.querySelectorAll('.card, .flow-step').forEach(el => {
+        document.querySelectorAll('.card, .flow-step, .position-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.5s, transform 0.5s';
             observer.observe(el);
+        });
+        
+        // Resaltar la sección activa en la navegación
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
