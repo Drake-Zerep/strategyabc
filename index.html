@@ -816,8 +816,8 @@
                     <div class="control-group">
                         <label for="position">Posición</label>
                         <select id="position">
-                            <option value="UTG" selected>UTG</option>
-                            <option value="MP">MP</option>
+                            <option value="UTG">UTG</option>
+                            <option value="MP" selected>MP</option>
                             <option value="CO">CO</option>
                             <option value="BU">BU</option>
                             <option value="SB">SB</option>
@@ -873,7 +873,7 @@
             
             <div class="card">
                 <div class="card-header">
-                    <h3>Guía de Colores del Visualizador - UTG</h3>
+                    <h3>Guía de Colores del Visualizador</h3>
                 </div>
                 <div class="card-body">
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
@@ -889,13 +889,14 @@
                             <div style="width: 20px; height: 20px; background-color: var(--orange); border-radius: 3px;"></div>
                             <span>4Bet</span>
                         </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: var(--danger); border-radius: 3px;"></div>
+                            <span>4Bet Bluff</span>
+                        </div>
                     </div>
-                    <p><strong>Rango UTG Completo:</strong></p>
-                    <ul>
-                        <li><strong>OR:</strong> 66-77-88-99-TT-JJ-QQ-KK-AA-ATs-AJs-AQs-AKs-KTs-KJs-KQs-QTs-QJs-JTs-AJo-AQo-AKo-KQo</li>
-                        <li><strong>Call vs 3Bet:</strong> JJ-QQ-AKs-AKo</li>
-                        <li><strong>4Bet:</strong> AA-KK</li>
-                    </ul>
+                    <div id="range-guide">
+                        <!-- El contenido se actualizará dinámicamente según la posición -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -920,7 +921,7 @@
     </footer>
 
     <script>
-        // Rangos COMPLETOS para UTG
+        // Rangos COMPLETOS para todas las posiciones
         const rangeData = {
             UTG: {
                 OR: [
@@ -939,19 +940,64 @@
                 "4Bet": ["AA", "KK"]
             },
             MP: {
-                OR: [],
-                Call3Bet: [],
-                "4Bet": []
+                OR: [
+                    // Parejas
+                    "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                    // Suited
+                    "ATs", "AJs", "AQs", "AKs",
+                    "KTs", "KJs", "KQs",
+                    "QTs", "QJs",
+                    "JTs",
+                    // Offsuit
+                    "ATo", "AJo", "AQo", "AKo",
+                    "KTo", "KJo", "KQo",
+                    "QJo"
+                ],
+                Call3Bet: ["JJ", "QQ", "AKs", "AKo"],
+                "4Bet": ["AA", "KK"]
             },
             CO: {
-                OR: [],
-                Call3Bet: [],
-                "4Bet": []
+                OR: [
+                    // Parejas
+                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                    // Suited
+                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                    "K8s", "K9s", "KTs", "KJs", "KQs",
+                    "Q8s", "Q9s", "QTs", "QJs",
+                    "J8s", "J9s", "JTs",
+                    "T8s", "T9s",
+                    "98s", "87s", "76s", "65s", "54s",
+                    // Offsuit
+                    "ATo", "AJo", "AQo",
+                    "KTo", "KJo", "KQo",
+                    "QTo", "QJo",
+                    "JTo"
+                ],
+                Call3Bet: ["77", "88", "99", "TT", "JJ", "ATs", "AJs", "AQs", "KTs", "KJs", "KQs", "QJs", "JTs", "AJo", "AQo", "KQo"],
+                "4Bet": ["QQ", "KK", "AA", "AKs", "AKo"]
             },
             BU: {
-                OR: [],
-                Call3Bet: [],
-                "4Bet": []
+                OR: [
+                    // Parejas
+                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                    // Suited
+                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                    "K2s", "K3s", "K4s", "K5s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                    "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                    "J7s", "J8s", "J9s", "JTs",
+                    "T7s", "T8s", "T9s",
+                    "97s", "98s",
+                    "87s", "76s", "65s", "54s",
+                    // Offsuit
+                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo",
+                    "K8o", "K9o", "KTo", "KJo", "KQo",
+                    "Q8o", "Q9o", "QTo", "QJo",
+                    "J9o", "JTo",
+                    "T8o", "T9o",
+                    "98o"
+                ],
+                Call3Bet: ["66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA", "ATs", "AJs", "AQs", "KTs", "KJs", "KQs", "QTs", "QJs", "JTs", "AJo", "AQo", "KQo"],
+                "4Bet": ["ATo", "KJo"]  // 4Bet Bluff (Rojo)
             },
             SB: {
                 OR: [],
@@ -968,6 +1014,7 @@
             const combosCount = document.getElementById('combos-count');
             const handsCount = document.getElementById('hands-count');
             const handDetails = document.getElementById('hand-details');
+            const rangeGuide = document.getElementById('range-guide');
             
             let selectedHands = new Set();
             
@@ -1091,7 +1138,7 @@
                 selectedHands.clear();
                 const cells = document.querySelectorAll('.grid-cell');
                 cells.forEach(cell => {
-                    cell.classList.remove('selected', 'blue-dark', 'orange');
+                    cell.classList.remove('selected', 'blue-dark', 'orange', 'red');
                 });
                 
                 // Obtener todos los rangos para la posición
@@ -1127,11 +1174,32 @@
                     selectedHands.add(hand);
                     const cell = document.querySelector(`.grid-cell[data-hand="${hand}"]`);
                     if (cell) {
-                        cell.classList.add('selected', 'orange');
+                        // Para BU, marcar 4Bet Bluff como rojo
+                        if (position === 'BU') {
+                            cell.classList.add('selected', 'red');
+                        } else {
+                            cell.classList.add('selected', 'orange');
+                        }
                     }
                 });
                 
                 updateStats();
+                updateRangeGuide(position);
+            }
+            
+            function updateRangeGuide(position) {
+                const orRange = rangeData[position].OR || [];
+                const call3BetRange = rangeData[position].Call3Bet || [];
+                const fourBetRange = rangeData[position]["4Bet"] || [];
+                
+                let guideHTML = `<p><strong>Rango ${position} Completo:</strong></p>`;
+                guideHTML += `<ul>`;
+                guideHTML += `<li><strong>OR:</strong> ${orRange.join('-')}</li>`;
+                guideHTML += `<li><strong>Call vs 3Bet:</strong> ${call3BetRange.join('-')}</li>`;
+                guideHTML += `<li><strong>4Bet:</strong> ${fourBetRange.join('-')}</li>`;
+                guideHTML += `</ul>`;
+                
+                rangeGuide.innerHTML = guideHTML;
             }
             
             positionSelect.addEventListener('change', updateRangeDisplay);
