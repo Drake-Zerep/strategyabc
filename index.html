@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokerStrategy Pro - Visualizador de Rangos Preflop</title>
+    <title>PokerStrategy Pro - Estrategias Completas de Póker</title>
     <style>
         :root {
             --primary: #1a1a2e;
@@ -154,6 +154,190 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            background-color: var(--accent);
+            border-bottom: 2px solid var(--highlight);
+        }
+        
+        .card-header h3 {
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-body ul {
+            list-style-type: none;
+        }
+        
+        .card-body ul li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .card-body ul li:before {
+            content: '•';
+            color: var(--highlight);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+        
+        .example {
+            background-color: rgba(15, 52, 96, 0.3);
+            border-left: 4px solid var(--highlight);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .hand {
+            display: inline-block;
+            background-color: var(--secondary);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            margin: 0 0.2rem;
+            font-weight: 500;
+        }
+        
+        .board {
+            display: inline-block;
+            background-color: var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            margin: 0 0.2rem;
+            font-weight: 500;
+        }
+        
+        .chip {
+            display: inline-block;
+            background-color: var(--highlight);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0 0.2rem;
+        }
+        
+        .strategy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .strategy-table th, .strategy-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .strategy-table th {
+            background-color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .strategy-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .badge-strong {
+            background-color: var(--success);
+        }
+        
+        .badge-sd {
+            background-color: var(--warning);
+            color: #333;
+        }
+        
+        .badge-nothing {
+            background-color: var(--danger);
+        }
+        
+        .flow-section {
+            margin: 3rem 0;
+        }
+        
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .flow-step {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .flow-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 1.5rem;
+            background-color: var(--highlight);
+        }
+        
+        .flow-step h3 {
+            color: var(--highlight);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .flow-step h3 span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: var(--highlight);
+            color: white;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            font-size: 0.9rem;
         }
         
         /* Estilos para el Visualizador */
@@ -410,6 +594,10 @@
                 font-size: 2.2rem;
             }
             
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
             .range-grid {
                 max-width: 500px;
                 grid-template-columns: repeat(14, 1fr);
@@ -425,20 +613,6 @@
                 align-items: flex-start;
             }
         }
-        
-        @media (max-width: 480px) {
-            .range-grid {
-                max-width: 400px;
-            }
-            
-            .grid-cell {
-                font-size: 0.5rem;
-            }
-            
-            .grid-header-cell {
-                font-size: 0.7rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -448,11 +622,10 @@
                 <a href="#" class="logo">Poker<span>Strategy</span> Pro</a>
                 <nav>
                     <ul>
-                        <li><a href="#preflop">Preflop</a></li>
+                        <li><a href="#preflop" class="active">Preflop</a></li>
                         <li><a href="#postflop">Postflop</a></li>
                         <li><a href="#turn-river">Turn & River</a></li>
-                        <li><a href="#visualizador" class="active">Visualizador</a></li>
-                        <li><a href="#calculadoras">Calculadoras</a></li>
+                        <li><a href="#visualizador">Visualizador</a></li>
                     </ul>
                 </nav>
             </div>
@@ -461,16 +634,265 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Visualizador de Rangos Preflop</h1>
-            <p>Explora y personaliza los rangos de manos preflop para cada posición. Mejora tu juego con esta herramienta interactiva.</p>
-            <a href="#visualizador" class="btn">Comenzar</a>
+            <h1>Estrategias Completas de Póker</h1>
+            <p>Domina el juego preflop, postflop y todas las fases del póker con nuestras guías avanzadas y herramientas interactivas.</p>
+            <a href="#preflop" class="btn">Comenzar a Aprender</a>
         </div>
     </section>
 
-    <section id="visualizador" class="section">
+    <!-- SECCIÓN PREFLOP -->
+    <section id="preflop" class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Visualizador de Rangos</h2>
+                <h2>Estrategia Preflop</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Introducción al Juego Preflop</h3>
+                </div>
+                <div class="card-body">
+                    <p>El juego preflop es la base de toda mano de póker. Las decisiones que tomes aquí determinarán el desarrollo de toda la mano.</p>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Posiciones en la Mesa</h4>
+                    
+                    <table class="strategy-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Rango Recomendado</th>
+                                <th>Características</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>UTG (Under The Gun)</td>
+                                <td>8-10%</td>
+                                <td>Juego muy ajustado, solo manos premium</td>
+                            </tr>
+                            <tr>
+                                <td>MP (Middle Position)</td>
+                                <td>12-15%</td>
+                                <td>Mayor flexibilidad que UTG</td>
+                            </tr>
+                            <tr>
+                                <td>CO (Cutoff)</td>
+                                <td>20-25%</td>
+                                <td>Posición muy favorable</td>
+                            </tr>
+                            <tr>
+                                <td>BU (Button)</td>
+                                <td>35-40%</td>
+                                <td>Mejor posición, máximo rango</td>
+                            </tr>
+                            <tr>
+                                <td>SB/BB (Ciegas)</td>
+                                <td>15-25%</td>
+                                <td>Defensa ajustada según posición</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="example">
+                        <strong>Concepto Clave:</strong> La posición es más importante que las cartas. Desde posiciones tardías puedes jugar muchas más manos.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cards-container" style="margin-top: 2rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Rangos de Apertura</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Los rangos de apertura varían según tu posición en la mesa:</p>
+                        <ul>
+                            <li><strong>UTG:</strong> 22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s</li>
+                            <li><strong>MP:</strong> 22+, A2s+, K2s+, Q4s+, J7s+, T7s+, 97s+, 87s, 76s, 65s, 54s</li>
+                            <li><strong>CO:</strong> 22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s</li>
+                            <li><strong>BU:</strong> 22+, A2s+, K2s+, Q2s+, J2s+, T2s+, 95s+, 85s+, 75s+, 65s, 54s</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Respuestas a 3-Bets</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Cómo responder cuando te enfrentas a un 3-bet:</p>
+                        <ul>
+                            <li><strong>Call vs 3Bet:</strong> Manos con buena equity postflop</li>
+                            <li><strong>4Bet por Valor:</strong> Manos muy fuertes (AA, KK, AKs)</li>
+                            <li><strong>4Bet Bluff:</strong> Manos con bloqueadores</li>
+                            <li><strong>Fold:</strong> Manos marginales fuera de posición</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Cold Calling</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Cuándo hacer call a un raise preflop:</p>
+                        <ul>
+                            <li><strong>Vs UTG-MP:</strong> 99, 88, 77, AJs, KJs, QJs, JTs, T9s, 98s</li>
+                            <li><strong>Vs CO-BU:</strong> TT, 99, 88, 77, AJs, ATs, KJs, QJs, JTs, T9s, 98s, 87s, 76s, 65s</li>
+                        </ul>
+                        <div class="example">
+                            <strong>Nota:</strong> El cold calling debe ser selectivo, especialmente fuera de posición.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN POSTFLOP -->
+    <section id="postflop" class="section" style="background-color: var(--secondary);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Estrategia Postflop</h2>
+            </div>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span class="badge badge-strong">F</span> Manos Fuertes</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Top Par con kicker "J" o mejor. Siempre apostamos con estas manos.</p>
+                        <ul>
+                            <li><span class="hand">A♦ Q♣</span> en <span class="board">A♣ 9♦ 3♠</span> - TP con kicker Q</li>
+                            <li><span class="hand">K♦ K♠</span> en <span class="board">7♥ 6♣ 2♦</span> - Overpair</li>
+                        </ul>
+                        <div class="example">
+                            <strong>Nota:</strong> El board determina si realmente es una mano fuerte.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span class="badge badge-sd">SD</span> Manos de Showdown</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>TP débiles, segundas y terceras parejas. Jugamos Check-Call.</p>
+                        <ul>
+                            <li><span class="hand">K♥ J♥</span> en <span class="board">A♠ J♦ 6♥</span> - Segunda pareja</li>
+                            <li><span class="hand">8♣ 8♥</span> en <span class="board">J♠ 7♣ 4♦</span> - Segunda pareja</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span class="badge badge-nothing">N</span> Absolutamente Nada</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Solo carta alta, proyectos o manos muy débiles.</p>
+                        <ul>
+                            <li><span class="hand">A♦ J♥</span> en <span class="board">Q♣ 7♥ 4♠</span> - Carta alta As</li>
+                            <li><span class="hand">K♥ T♥</span> en <span class="board">J♠ 6♥ 2♥</span> - Proyecto de color</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-section">
+                <div class="flow-container">
+                    <div class="flow-step">
+                        <h3><span>1</span> Apuesta de Continuación (CB)</h3>
+                        <p>Hacemos CB cuando tenemos una <strong>mano fuerte</strong> o cuando <strong>no tenemos absolutamente nada</strong> (CB de Bluff).</p>
+                        <div class="example">
+                            <strong>CB de Bluff:</strong> Cuando el flop es AXX, KXX, QXX, JXX, monocolor o con carta doblada.
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <h3><span>2</span> Respuesta a Raises</h3>
+                        <p>Cuando nos hacen raise a nuestra CB:</p>
+                        <ul>
+                            <li><strong>Pagamos:</strong> Con manos que pueden mejorar (dobles parejas, overpairs, proyectos)</li>
+                            <li><strong>Foldeamos:</strong> Manos que no mejoran (top pairs débiles)</li>
+                            <li><strong>Re-subimos:</strong> Con manos muy fuertes (sets, escaleras, colores)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <h3><span>3</span> Juego en Call</h3>
+                        <p>Cuando pagamos un raise preflop:</p>
+                        <ul>
+                            <li><strong>Sets:</strong> Raise en flop con proyectos, call y raise en turn sin proyectos</li>
+                            <li><strong>Manos de Showdown:</strong> Call en flop, fold si se debilita en turn</li>
+                            <li><strong>Proyectos:</strong> Call para mejorar, raise si completamos proyecto fuerte</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN TURN & RIVER -->
+    <section id="turn-river" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Juego en Turn & River</h2>
+            </div>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>2º Barrel en el Turn</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Hacemos segunda apuesta en el Turn con:</p>
+                        <ul>
+                            <li>Nuestras manos fuertes que no empeoran</li>
+                            <li>Algunas manos de CB Bluff que ligan mano fuerte en Turn</li>
+                        </ul>
+                        <div class="example">
+                            <strong>Ejemplo:</strong> <span class="hand">K♠ Q♠</span> en <span class="board">J♦ 8♣ 4♠</span> - <span class="board">K♣</span> → 2º Barrel
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>3º Barrel en el River</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Hacemos tercera apuesta en el River con:</p>
+                        <ul>
+                            <li>Nuestras manos fuertes si no se completa proyecto del rival</li>
+                            <li>Algunos bluffs cuando el rival muestra debilidad</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Manejo de Showdown</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Cómo jugar cuando llegamos al river:</p>
+                        <ul>
+                            <li><strong>Manos de SD fuertes:</strong> Podemos apostar por valor o check-call</li>
+                            <li><strong>Manos de SD débiles:</strong> Check-fold si el rival apuesta fuerte</li>
+                            <li><strong>Bluffs:</strong> Considerar bet si el rival ha mostrado debilidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN VISUALIZADOR -->
+    <section id="visualizador" class="section" style="background-color: var(--secondary);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Visualizador de Rangos Preflop</h2>
             </div>
             
             <div class="visualizer-container">
@@ -483,7 +905,6 @@
                             <option value="CO">CO</option>
                             <option value="BU" selected>BU</option>
                             <option value="SB">SB</option>
-                            <option value="BB">BB</option>
                         </select>
                     </div>
                     
@@ -494,16 +915,6 @@
                             <option value="Call3Bet">Call vs 3Bet</option>
                             <option value="4Bet">4Bet</option>
                             <option value="4BetBluff">4Bet Bluff</option>
-                            <option value="3BetValue">3Bet por Valor</option>
-                            <option value="ColdCall">Cold Call</option>
-                        </select>
-                    </div>
-                    
-                    <div class="control-group">
-                        <label for="vs-position">Vs Posición</label>
-                        <select id="vs-position">
-                            <option value="UTG-MP">UTG-MP</option>
-                            <option value="CO-BU">CO-BU</option>
                         </select>
                     </div>
                 </div>
@@ -566,18 +977,18 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 20px; height: 20px; background-color: var(--blue-dark); border-radius: 3px;"></div>
-                            <span>Call vs 3Bet / Cold Call</span>
+                            <span>Call vs 3Bet</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 20px; height: 20px; background-color: var(--orange); border-radius: 3px;"></div>
-                            <span>4Bet / 3Bet por Valor</span>
+                            <span>4Bet</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 20px; height: 20px; background-color: var(--danger); border-radius: 3px;"></div>
                             <span>4Bet Bluff</span>
                         </div>
                     </div>
-                    <p>Selecciona diferentes posiciones y acciones para ver cómo cambian los rangos recomendados. Puedes hacer clic en cualquier mano para ver sus detalles y estadísticas.</p>
+                    <p>Selecciona diferentes posiciones y acciones para ver cómo cambian los rangos recomendados.</p>
                 </div>
             </div>
         </div>
@@ -593,7 +1004,6 @@
                     <a href="#postflop">Postflop</a>
                     <a href="#turn-river">Turn & River</a>
                     <a href="#visualizador">Visualizador</a>
-                    <a href="#calculadoras">Calculadoras</a>
                 </div>
                 <div class="copyright">
                     &copy; 2023 PokerStrategy Pro. Todos los derechos reservados.
@@ -603,116 +1013,104 @@
     </footer>
 
     <script>
-        // Función para expandir rangos como "22+", "A2s+", etc.
-        function expandRange(rangeStr) {
-            const hands = new Set();
-            const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
-            
-            // Procesar cada parte del rango
-            const parts = rangeStr.split(', ');
-            
-            parts.forEach(part => {
-                if (part.includes('+')) {
-                    // Rango con "+" como "22+", "A2s+", etc.
-                    const base = part.replace('+', '');
-                    const rank1 = base[0];
-                    const rank2 = base[1];
-                    const isSuited = base.includes('s');
-                    const isOffsuit = base.includes('o');
-                    
-                    if (rank1 === rank2) {
-                        // Parejas como "22+"
-                        const startIndex = ranks.indexOf(rank1);
-                        for (let i = startIndex; i >= 0; i--) {
-                            hands.add(ranks[i] + ranks[i]);
-                        }
-                    } else if (isSuited) {
-                        // Suited como "A2s+"
-                        const startIndex = ranks.indexOf(rank2);
-                        for (let i = startIndex; i < ranks.length; i++) {
-                            if (ranks[i] !== rank1) {
-                                hands.add(rank1 + ranks[i] + 's');
-                            }
-                        }
-                    } else if (isOffsuit) {
-                        // Offsuit como "A2o+"
-                        const startIndex = ranks.indexOf(rank2);
-                        for (let i = startIndex; i < ranks.length; i++) {
-                            if (ranks[i] !== rank1) {
-                                hands.add(rank1 + ranks[i] + 'o');
-                            }
-                        }
-                    }
-                } else if (part.includes('-')) {
-                    // Rango como "AQs-AJs"
-                    const [start, end] = part.split('-');
-                    const startRank1 = start[0];
-                    const startRank2 = start[1];
-                    const endRank1 = end[0];
-                    const endRank2 = end[1];
-                    const isSuited = start.includes('s');
-                    
-                    if (startRank1 === endRank1) {
-                        // Mismo rango principal como "AQs-AJs"
-                        const startIndex = ranks.indexOf(startRank2);
-                        const endIndex = ranks.indexOf(endRank2);
-                        for (let i = startIndex; i <= endIndex; i++) {
-                            if (ranks[i] !== startRank1) {
-                                hands.add(startRank1 + ranks[i] + (isSuited ? 's' : 'o'));
-                            }
-                        }
-                    }
-                } else {
-                    // Mano individual
-                    hands.add(part);
-                }
-            });
-            
-            return Array.from(hands);
-        }
-
-        // Rangos basados en la información proporcionada
+        // Rangos específicos para cada posición
         const rangeData = {
             UTG: {
-                OR: expandRange("22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s, A2o+, K2o+, Q6o+, J8o+, T8o+, 98o, 87o, 76o"),
-                Call3Bet: expandRange("99+, AQs-AJs, AKo"),
+                OR: ["22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                     "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                     "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                     "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                     "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
+                     "T6s", "T7s", "T8s", "T9s",
+                     "96s", "97s", "98s",
+                     "86s", "87s",
+                     "76s", "65s", "54s",
+                     "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
+                     "K2o", "K3o", "K4o", "K5o", "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
+                     "Q6o", "Q7o", "Q8o", "Q9o", "QTo", "QJo",
+                     "J8o", "J9o", "JTo",
+                     "T8o", "T9o",
+                     "98o", "87o", "76o"],
+                Call3Bet: ["99", "TT", "JJ", "QQ", "AQs", "AJs", "AKo"],
                 "4Bet": ["AA", "KK", "AKs", "AKo"],
-                "4BetBluff": ["ATo"] // Eligiendo ATo como 4Bet Bluff
+                "4BetBluff": ["ATo"]
             },
             MP: {
-                OR: expandRange("22+, A2s+, K2s+, Q4s+, J7s+, T7s+, 97s+, 87s, 76s, 65s, 54s, A2o+, K5o+, Q8o+, J9o+, T9o, 98o, 87o"),
-                Call3Bet: expandRange("88+, AQo+, AJs+, KQs"),
+                OR: ["22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                     "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                     "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                     "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                     "J7s", "J8s", "J9s", "JTs",
+                     "T7s", "T8s", "T9s",
+                     "97s", "98s",
+                     "87s", "76s", "65s", "54s",
+                     "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
+                     "K5o", "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
+                     "Q8o", "Q9o", "QTo", "QJo",
+                     "J9o", "JTo",
+                     "T9o", "98o", "87o"],
+                Call3Bet: ["88", "99", "TT", "JJ", "AQo", "AJs", "KQs"],
                 "4Bet": ["AA", "KK", "QQ", "AKs", "AKo"],
-                "4BetBluff": ["KJo"] // Eligiendo KJo como 4Bet Bluff
+                "4BetBluff": ["KJo"]
             },
             CO: {
-                OR: expandRange("22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s, A2o+, K8o+, Q8o+, J9o+, T9o, 98o, 87o"),
-                Call3Bet: expandRange("77+, ATs+, KQs, QJs, AJo+, KQo, JTs, T9s, 98s"),
+                OR: ["22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                     "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                     "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                     "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                     "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
+                     "T6s", "T7s", "T8s", "T9s",
+                     "96s", "97s", "98s",
+                     "86s", "87s",
+                     "76s", "65s", "54s",
+                     "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
+                     "K8o", "K9o", "KTo", "KJo", "KQo",
+                     "Q8o", "Q9o", "QTo", "QJo",
+                     "J9o", "JTo",
+                     "T9o", "98o", "87o"],
+                Call3Bet: ["77", "88", "99", "TT", "ATs", "KQs", "QJs", "AJo", "KQo", "JTs", "T9s", "98s"],
                 "4Bet": ["AA", "KK", "QQ", "AKs", "AKo"],
-                "4BetBluff": ["KJo"] // Eligiendo KJo como 4Bet Bluff
+                "4BetBluff": ["KJo"]
             },
             BU: {
-                OR: expandRange("22+, A2s+, K2s+, Q2s+, J2s+, T2s+, 95s+, 85s+, 75s+, 65s, 54s, A2o+, K6o+, Q8o+, J9o+, T9o, 98o, 87o, 76o"),
-                Call3Bet: expandRange("66+, ATs+, A5s, KTs+, QTs+, JTs, T9s, 98s, AJo+, KQo, QJs"),
-                "4Bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs"],
-                "4BetBluff": ["ATo"] // Eligiendo ATo como 4Bet Bluff
-            },
-            SB: {
-                // SB usa el mismo rango que BU
-                OR: expandRange("22+, A2s+, K2s+, Q2s+, J2s+, T2s+, 95s+, 85s+, 75s+, 65s, 54s, A2o+, K6o+, Q8o+, J9o+, T9o, 98o, 87o, 76o"),
-                Call3Bet: expandRange("66+, ATs+, A5s, KTs+, QTs+, JTs, T9s, 98s, AJo+, KQo, QJs"),
+                OR: ["22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                     "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                     "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                     "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                     "J2s", "J3s", "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
+                     "T2s", "T3s", "T4s", "T5s", "T6s", "T7s", "T8s", "T9s",
+                     "95s", "96s", "97s", "98s",
+                     "85s", "86s", "87s",
+                     "75s", "76s",
+                     "65s", "54s",
+                     "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
+                     "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
+                     "Q8o", "Q9o", "QTo", "QJo",
+                     "J9o", "JTo",
+                     "T9o", "98o", "87o", "76o"],
+                Call3Bet: ["66", "77", "88", "99", "TT", "ATs", "A5s", "KTs", "QTs", "JTs", "T9s", "98s", "AJo", "KQo", "QJs"],
                 "4Bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs"],
                 "4BetBluff": ["ATo"]
             },
-            BB: {
-                "3BetValue": {
-                    "UTG-MP": expandRange("AA, KK, QQ, AKs, AKo, AQs, AJs, KQs, JJ, TT"),
-                    "CO-BU": expandRange("AA, KK, QQ, JJ, AKs, AKo, AQs, KQs")
-                },
-                "ColdCall": {
-                    "UTG-MP": expandRange("99, 88, 77, AJs, KJs, QJs, JTs, T9s, 98s"),
-                    "CO-BU": expandRange("TT, 99, 88, 77, AJs, ATs, KJs, QJs, JTs, T9s, 98s, 87s, 76s, 65s")
-                }
+            SB: {
+                OR: ["22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
+                     "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
+                     "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
+                     "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
+                     "J2s", "J3s", "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
+                     "T2s", "T3s", "T4s", "T5s", "T6s", "T7s", "T8s", "T9s",
+                     "95s", "96s", "97s", "98s",
+                     "85s", "86s", "87s",
+                     "75s", "76s",
+                     "65s", "54s",
+                     "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
+                     "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
+                     "Q8o", "Q9o", "QTo", "QJo",
+                     "J9o", "JTo",
+                     "T9o", "98o", "87o", "76o"],
+                Call3Bet: ["66", "77", "88", "99", "TT", "ATs", "A5s", "KTs", "QTs", "JTs", "T9s", "98s", "AJo", "KQo", "QJs"],
+                "4Bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs"],
+                "4BetBluff": ["ATo"]
             }
         };
 
@@ -721,7 +1119,6 @@
             const rangeGrid = document.getElementById('range-grid');
             const positionSelect = document.getElementById('position');
             const actionSelect = document.getElementById('action');
-            const vsPositionSelect = document.getElementById('vs-position');
             const rangePercent = document.getElementById('range-percent');
             const combosCount = document.getElementById('combos-count');
             const handsCount = document.getElementById('hands-count');
@@ -731,12 +1128,11 @@
             
             // Crear la cuadrícula de manos
             function createGrid() {
-                // Limpiar grid existente
                 rangeGrid.innerHTML = '';
                 
                 const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
                 
-                // Crear cabeceras de columna
+                // Cabeceras de columna
                 const emptyHeader = document.createElement('div');
                 emptyHeader.className = 'grid-header-cell';
                 rangeGrid.appendChild(emptyHeader);
@@ -748,29 +1144,24 @@
                     rangeGrid.appendChild(header);
                 });
                 
-                // Crear filas
+                // Filas
                 for (let i = 0; i < ranks.length; i++) {
-                    // Añadir cabecera de fila
                     const rowHeader = document.createElement('div');
                     rowHeader.className = 'grid-header-cell';
                     rowHeader.textContent = ranks[i];
                     rangeGrid.appendChild(rowHeader);
                     
-                    // Crear celdas para esta fila
                     for (let j = 0; j < ranks.length; j++) {
                         const cell = document.createElement('div');
                         cell.className = 'grid-cell';
                         
                         if (i === j) {
-                            // Parejas
                             cell.textContent = `${ranks[i]}${ranks[j]}`;
                             cell.dataset.hand = `${ranks[i]}${ranks[j]}`;
                         } else if (i < j) {
-                            // Manos suited
                             cell.textContent = `${ranks[i]}${ranks[j]}s`;
                             cell.dataset.hand = `${ranks[i]}${ranks[j]}s`;
                         } else {
-                            // Manos offsuit
                             cell.textContent = `${ranks[j]}${ranks[i]}o`;
                             cell.dataset.hand = `${ranks[j]}${ranks[i]}o`;
                         }
@@ -786,7 +1177,6 @@
                 updateRangeDisplay();
             }
             
-            // Alternar selección de una mano
             function toggleHandSelection(cell) {
                 const hand = cell.dataset.hand;
                 
@@ -802,21 +1192,17 @@
                 updateHandDetails(hand);
             }
             
-            // Actualizar estadísticas
             function updateStats() {
                 const percent = ((selectedHands.size / 169) * 100).toFixed(1);
                 rangePercent.textContent = `${percent}%`;
-                combosCount.textContent = selectedHands.size * 6; // Aproximación
+                combosCount.textContent = selectedHands.size * 6;
                 handsCount.textContent = selectedHands.size;
             }
             
-            // Actualizar detalles de la mano
             function updateHandDetails(hand) {
                 if (!hand) return;
                 
                 handDetails.classList.add('active');
-                
-                // Actualizar cartas visuales
                 const card1 = document.getElementById('card1');
                 const card2 = document.getElementById('card2');
                 
@@ -827,7 +1213,6 @@
                 card1.querySelector('.card-value').textContent = rank1;
                 card2.querySelector('.card-value').textContent = rank2;
                 
-                // Asignar palos y colores
                 if (suited) {
                     card1.querySelector('.card-suit').textContent = '♠';
                     card2.querySelector('.card-suit').textContent = '♠';
@@ -840,7 +1225,6 @@
                     card2.className = 'card-display red';
                 }
                 
-                // Actualizar tipo de mano
                 const handType = document.getElementById('hand-type');
                 if (rank1 === rank2) {
                     handType.textContent = 'Pareja';
@@ -850,88 +1234,63 @@
                     handType.textContent = 'Mano offsuit';
                 }
                 
-                // Calcular equity (simulado)
-                const equity = Math.floor(Math.random() * 30) + 50; // 50-80%
+                const equity = Math.floor(Math.random() * 30) + 50;
                 document.getElementById('hand-equity').textContent = `${equity}%`;
                 document.querySelector('.equity-fill').style.width = `${equity}%`;
             }
             
-            // Actualizar rango según posición y acción
             function updateRangeDisplay() {
                 const position = positionSelect.value;
                 const action = actionSelect.value;
-                const vsPosition = vsPositionSelect.value;
                 
-                // Limpiar selecciones
                 selectedHands.clear();
                 const cells = document.querySelectorAll('.grid-cell');
                 cells.forEach(cell => {
                     cell.classList.remove('selected', 'blue-dark', 'orange', 'red');
-                    cell.style.backgroundColor = '';
                 });
                 
-                // Obtener el rango correspondiente
-                let range = [];
+                const range = rangeData[position][action] || [];
                 
-                if (position === "BB" && (action === "3BetValue" || action === "ColdCall")) {
-                    range = rangeData[position][action][vsPosition] || [];
-                } else {
-                    range = rangeData[position][action] || [];
-                }
-                
-                // Seleccionar manos del rango y aplicar colores
                 range.forEach(hand => {
                     selectedHands.add(hand);
                     const cell = document.querySelector(`.grid-cell[data-hand="${hand}"]`);
                     if (cell) {
                         cell.classList.add('selected');
                         
-                        // Aplicar color según la acción
-                        if (action === "Call3Bet" || action === "ColdCall") {
+                        if (action === "Call3Bet") {
                             cell.classList.add('blue-dark');
-                        } else if (action === "4Bet" || action === "3BetValue") {
+                        } else if (action === "4Bet") {
                             cell.classList.add('orange');
                         } else if (action === "4BetBluff") {
                             cell.classList.add('red');
                         }
-                        // Para OR, se mantiene el color por defecto (highlight)
                     }
                 });
                 
                 updateStats();
             }
             
-            // Configurar eventos
-            positionSelect.addEventListener('change', function() {
-                // Mostrar/ocultar selector de vs-position para BB
-                if (this.value === "BB") {
-                    vsPositionSelect.parentElement.style.display = 'flex';
-                } else {
-                    vsPositionSelect.parentElement.style.display = 'none';
-                }
-                updateRangeDisplay();
-            });
+            positionSelect.addEventListener('change', updateRangeDisplay);
+            actionSelect.addEventListener('change', updateRangeDisplay);
             
-            actionSelect.addEventListener('change', function() {
-                // Para BB, mostrar vs-position solo para 3BetValue y ColdCall
-                if (positionSelect.value === "BB" && (this.value === "3BetValue" || this.value === "ColdCall")) {
-                    vsPositionSelect.parentElement.style.display = 'flex';
-                } else if (positionSelect.value === "BB") {
-                    vsPositionSelect.parentElement.style.display = 'none';
-                }
-                updateRangeDisplay();
-            });
-            
-            vsPositionSelect.addEventListener('change', updateRangeDisplay);
-            
-            // Inicializar
             createGrid();
-            
-            // Ocultar vs-position inicialmente (excepto para BB)
-            vsPositionSelect.parentElement.style.display = 'none';
+        });
+
+        // Navegación suave
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
     </script>
 </body>
 </html>
-
 
