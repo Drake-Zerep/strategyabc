@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokerStrategy Pro - Juego Preflop y Postflop</title>
+    <title>PokerStrategy Pro - Visualizador de Rangos Preflop</title>
     <style>
         :root {
             --primary: #1a1a2e;
@@ -154,300 +154,244 @@
             transform: translateX(-50%);
         }
         
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .card {
+        /* Estilos para el Visualizador */
+        .visualizer-container {
             background-color: var(--card-bg);
             border-radius: 10px;
-            overflow: hidden;
+            padding: 2rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 2rem;
         }
         
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .card-header {
-            padding: 1.5rem;
-            background-color: var(--accent);
-            border-bottom: 2px solid var(--highlight);
-        }
-        
-        .card-header h3 {
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        .card-body ul {
-            list-style-type: none;
-        }
-        
-        .card-body ul li {
-            margin-bottom: 0.8rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-        
-        .card-body ul li:before {
-            content: '•';
-            color: var(--highlight);
-            position: absolute;
-            left: 0;
-            font-size: 1.2rem;
-        }
-        
-        .example {
-            background-color: rgba(15, 52, 96, 0.3);
-            border-left: 4px solid var(--highlight);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .hand {
-            display: inline-block;
-            background-color: var(--secondary);
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            margin: 0 0.2rem;
-            font-weight: 500;
-        }
-        
-        .board {
-            display: inline-block;
-            background-color: var(--accent);
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            margin: 0 0.2rem;
-            font-weight: 500;
-        }
-        
-        .chip {
-            display: inline-block;
-            background-color: var(--highlight);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin: 0 0.2rem;
-        }
-        
-        .strategy-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-        }
-        
-        .strategy-table th, .strategy-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .strategy-table th {
-            background-color: var(--accent);
-            font-weight: 600;
-        }
-        
-        .strategy-table tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
-        }
-        
-        .badge-strong {
-            background-color: var(--success);
-        }
-        
-        .badge-sd {
-            background-color: var(--warning);
-            color: #333;
-        }
-        
-        .badge-nothing {
-            background-color: var(--danger);
-        }
-        
-        .badge-premium {
-            background-color: var(--info);
-        }
-        
-        .flow-section {
-            margin: 3rem 0;
-        }
-        
-        .flow-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .flow-step {
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 1.5rem;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .flow-step:not(:last-child):after {
-            content: '';
-            position: absolute;
-            bottom: -1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 1.5rem;
-            background-color: var(--highlight);
-        }
-        
-        .flow-step h3 {
-            color: var(--highlight);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .flow-step h3 span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: var(--highlight);
-            color: white;
-            border-radius: 50%;
-            margin-right: 0.8rem;
-            font-size: 0.9rem;
-        }
-        
-        .table-diagram {
-            width: 100%;
-            max-width: 600px;
-            margin: 2rem auto;
-            position: relative;
-        }
-        
-        .table-diagram img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .position-marker {
-            position: absolute;
-            background-color: var(--highlight);
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .position-info {
+        .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .control-group label {
+            font-weight: 500;
+            color: var(--highlight);
+        }
+        
+        select, input {
+            background-color: var(--secondary);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .range-grid {
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 2px;
             margin: 2rem 0;
         }
         
-        .position-card {
-            flex: 1;
-            min-width: 200px;
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        .grid-header {
+            display: contents;
         }
         
-        .position-card h4 {
-            color: var(--highlight);
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
-        }
-        
-        .range-table {
-            width: 100%;
-            margin: 1.5rem 0;
-            border-collapse: collapse;
-        }
-        
-        .range-table th, .range-table td {
-            padding: 0.8rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .range-table th {
-            background-color: var(--accent);
+        .grid-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--secondary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
             font-weight: 600;
+            position: relative;
         }
         
-        .range-table .premium {
-            background-color: rgba(33, 150, 243, 0.2);
+        .grid-cell:hover {
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
         }
         
-        .range-table .strong {
-            background-color: rgba(76, 175, 80, 0.2);
+        .grid-cell.selected {
+            background-color: var(--highlight);
         }
         
-        .range-table .medium {
-            background-color: rgba(255, 193, 7, 0.2);
+        .grid-cell.premium {
+            background-color: #4CAF50;
         }
         
-        .range-table .speculative {
-            background-color: rgba(233, 69, 96, 0.2);
+        .grid-cell.strong {
+            background-color: #8BC34A;
         }
         
-        .action-buttons {
+        .grid-cell.medium {
+            background-color: #FFC107;
+            color: #333;
+        }
+        
+        .grid-cell.speculative {
+            background-color: #FF9800;
+        }
+        
+        .grid-cell.light {
+            background-color: #FF5722;
+        }
+        
+        .grid-header-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            font-weight: 600;
+            color: var(--highlight);
+        }
+        
+        .range-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--secondary);
+            border-radius: 5px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--highlight);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .range-actions {
             display: flex;
             gap: 1rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
+            margin-top: 1rem;
         }
         
         .action-btn {
-            flex: 1;
-            min-width: 120px;
+            padding: 0.5rem 1rem;
             background-color: var(--accent);
             border: none;
             color: var(--text);
-            padding: 0.8rem 1rem;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-weight: 500;
+            transition: background-color 0.3s;
         }
         
         .action-btn:hover {
             background-color: var(--highlight);
-            transform: translateY(-2px);
         }
         
-        .action-btn.active {
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .preset-btn {
+            padding: 0.4rem 0.8rem;
+            background-color: var(--secondary);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background-color: var(--accent);
+        }
+        
+        .preset-btn.active {
             background-color: var(--highlight);
+            border-color: var(--highlight);
+        }
+        
+        .hand-details {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: var(--secondary);
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .hand-details.active {
+            display: block;
+        }
+        
+        .hand-cards {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-display {
+            width: 80px;
+            height: 112px;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-display.red {
+            color: #e74c3c;
+        }
+        
+        .card-display.black {
+            color: #2c3e50;
+        }
+        
+        .card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .card-suit {
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .hand-equity {
+            margin-top: 1rem;
+        }
+        
+        .equity-bar {
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .equity-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--highlight), #ff7b9c);
+            border-radius: 10px;
+            transition: width 0.5s;
         }
         
         footer {
@@ -509,16 +453,18 @@
                 font-size: 2.2rem;
             }
             
-            .cards-container {
-                grid-template-columns: 1fr;
+            .range-grid {
+                grid-template-columns: repeat(13, 1fr);
+                gap: 1px;
             }
             
-            .position-info {
-                flex-direction: column;
+            .grid-cell {
+                font-size: 0.6rem;
             }
             
-            .action-buttons {
+            .controls {
                 flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -530,11 +476,11 @@
                 <a href="#" class="logo">Poker<span>Strategy</span> Pro</a>
                 <nav>
                     <ul>
-                        <li><a href="#preflop" class="active">Preflop</a></li>
+                        <li><a href="#preflop">Preflop</a></li>
                         <li><a href="#postflop">Postflop</a></li>
                         <li><a href="#turn-river">Turn & River</a></li>
+                        <li><a href="#visualizador" class="active">Visualizador</a></li>
                         <li><a href="#calculadoras">Calculadoras</a></li>
-                        <li><a href="#blog">Blog</a></li>
                     </ul>
                 </nav>
             </div>
@@ -543,381 +489,156 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Dominio del Juego Preflop y Postflop</h1>
-            <p>Aprende estrategias avanzadas para tomar decisiones óptimas en cada fase del juego y maximizar tus ganancias en cada mano.</p>
-            <a href="#preflop" class="btn">Explorar Estrategias</a>
+            <h1>Visualizador de Rangos Preflop</h1>
+            <p>Explora y personaliza los rangos de manos preflop para cada posición. Mejora tu juego con esta herramienta interactiva.</p>
+            <a href="#visualizador" class="btn">Comenzar</a>
         </div>
     </section>
 
-    <section id="preflop" class="section">
+    <section id="visualizador" class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Introducción al Juego Preflop</h2>
+                <h2>Visualizador de Rangos</h2>
+            </div>
+            
+            <div class="visualizer-container">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="position">Posición</label>
+                        <select id="position">
+                            <option value="UTG">UTG</option>
+                            <option value="MP">MP</option>
+                            <option value="HJ">HJ</option>
+                            <option value="CO">CO</option>
+                            <option value="BU" selected>BU</option>
+                            <option value="SB">SB</option>
+                            <option value="BB">BB</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="action">Acción</label>
+                        <select id="action">
+                            <option value="open">Abrir</option>
+                            <option value="vs3bet">Vs 3-Bet</option>
+                            <option value="vs4bet">Vs 4-Bet</option>
+                            <option value="call">Call</option>
+                            <option value="3bet">3-Bet</option>
+                            <option value="4bet">4-Bet</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="range-percentage">% del Rango</label>
+                        <input type="range" id="range-percentage" min="0" max="100" value="40">
+                        <span id="percentage-value">40%</span>
+                    </div>
+                </div>
+                
+                <div class="preset-buttons">
+                    <button class="preset-btn active" data-range="25">Tight (25%)</button>
+                    <button class="preset-btn" data-range="40">Standard (40%)</button>
+                    <button class="preset-btn" data-range="55">Loose (55%)</button>
+                    <button class="preset-btn" data-range="70">Muy Loose (70%)</button>
+                    <button class="preset-btn" data-range="0">Limpiar</button>
+                </div>
+                
+                <div class="range-grid" id="range-grid">
+                    <!-- Grid headers -->
+                    <div class="grid-header">
+                        <div class="grid-header-cell"></div>
+                        <div class="grid-header-cell">A</div>
+                        <div class="grid-header-cell">K</div>
+                        <div class="grid-header-cell">Q</div>
+                        <div class="grid-header-cell">J</div>
+                        <div class="grid-header-cell">T</div>
+                        <div class="grid-header-cell">9</div>
+                        <div class="grid-header-cell">8</div>
+                        <div class="grid-header-cell">7</div>
+                        <div class="grid-header-cell">6</div>
+                        <div class="grid-header-cell">5</div>
+                        <div class="grid-header-cell">4</div>
+                        <div class="grid-header-cell">3</div>
+                        <div class="grid-header-cell">2</div>
+                    </div>
+                    
+                    <!-- Grid cells will be generated by JavaScript -->
+                </div>
+                
+                <div class="range-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="range-percent">40%</div>
+                        <div class="stat-label">del Rango</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="combos-count">132</div>
+                        <div class="stat-label">Combinaciones</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="hands-count">66</div>
+                        <div class="stat-label">Manos</div>
+                    </div>
+                </div>
+                
+                <div class="range-actions">
+                    <button class="action-btn" id="select-all">Seleccionar Todo</button>
+                    <button class="action-btn" id="clear-all">Limpiar Todo</button>
+                    <button class="action-btn" id="invert-selection">Invertir</button>
+                </div>
+                
+                <div class="hand-details" id="hand-details">
+                    <h3>Detalles de la Mano</h3>
+                    <div class="hand-cards">
+                        <div class="card-display black" id="card1">
+                            <div class="card-value">A</div>
+                            <div class="card-suit">♠</div>
+                        </div>
+                        <div class="card-display red" id="card2">
+                            <div class="card-value">K</div>
+                            <div class="card-suit">♥</div>
+                        </div>
+                    </div>
+                    <div class="hand-info">
+                        <p><strong>Tipo:</strong> <span id="hand-type">Pareja</span></p>
+                        <p><strong>Equity vs Rango Aleatorio:</strong> <span id="hand-equity">65%</span></p>
+                    </div>
+                    <div class="hand-equity">
+                        <p>Equity:</p>
+                        <div class="equity-bar">
+                            <div class="equity-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="card">
                 <div class="card-header">
-                    <h3>Conceptos Básicos del Juego Preflop</h3>
+                    <h3>Guía de Colores del Visualizador</h3>
                 </div>
                 <div class="card-body">
-                    <p>El juego preflop significa todo el desarrollo del juego antes de ver el flop, antes de ver las cartas comunitarias. Es fundamental tener una estrategia básica sólida, jugando como jugadores sin datos específicos, sin usar software de apoyo como HUDs o trackers.</p>
-                    
-                    <div class="example">
-                        <strong>Enfoque:</strong> Jugaremos pocas manos pero muy fuertes en general, priorizando la calidad sobre la cantidad.
-                    </div>
-                    
-                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Posiciones en una Mesa de 6 Jugadores</h4>
-                    
-                    <div class="table-diagram">
-                        <div style="background: var(--accent); border-radius: 10px; padding: 2rem; position: relative; height: 300px;">
-                            <!-- Mesa de poker visual -->
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 100px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text);">
-                                MESA
-                            </div>
-                            
-                            <!-- Posiciones -->
-                            <div class="position-marker" style="top: 20px; left: 50%; transform: translateX(-50%);">BU</div>
-                            <div class="position-marker" style="top: 50%; right: 20px; transform: translateY(-50%);">CO</div>
-                            <div class="position-marker" style="top: 50%; left: 20px; transform: translateY(-50%);">UTG</div>
-                            <div class="position-marker" style="bottom: 60px; left: 30%;">MP</div>
-                            <div class="position-marker" style="bottom: 60px; right: 30%;">HJ</div>
-                            <div class="position-marker" style="bottom: 20px; left: 50%; transform: translateX(-50%);">SB</div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: #4CAF50; border-radius: 3px;"></div>
+                            <span>Manos Premium (AA, KK, QQ, AK)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: #8BC34A; border-radius: 3px;"></div>
+                            <span>Manos Fuertes (JJ, TT, AQ, AJ)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: #FFC107; border-radius: 3px;"></div>
+                            <span>Manos Medias (99, 88, AT, KQ)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: #FF9800; border-radius: 3px;"></div>
+                            <span>Manos Especulativas (77, 66, A9, KJ)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: #FF5722; border-radius: 3px;"></div>
+                            <span>Manos Marginales (55, 44, A2, QJ)</span>
                         </div>
                     </div>
-                    
-                    <div class="position-info">
-                        <div class="position-card">
-                            <h4>UTG (Under The Gun)</h4>
-                            <p>Primera posición en actuar postflop. Juego muy ajustado, solo manos premium.</p>
-                        </div>
-                        <div class="position-card">
-                            <h4>MP (Middle Position)</h4>
-                            <p>Mayor flexibilidad que UTG, pero aún juego conservador.</p>
-                        </div>
-                        <div class="position-card">
-                            <h4>HJ (Hijack)</h4>
-                            <p>Posición favorable, permite abrir más manos.</p>
-                        </div>
-                        <div class="position-card">
-                            <h4>CO (Cutoff)</h4>
-                            <p>Una de las mejores posiciones, amplio rango de apertura.</p>
-                        </div>
-                        <div class="position-card">
-                            <h4>BU (Button)</h4>
-                            <p>Mejor posición, última en actuar en todas las calles postflop.</p>
-                        </div>
-                        <div class="position-card">
-                            <h4>SB/BB (Ciegas)</h4>
-                            <p>Defensa amplia desde BB, juego ajustado desde SB.</p>
-                        </div>
-                    </div>
-                    
-                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Rangos de Apertura por Posición</h4>
-                    
-                    <table class="strategy-table">
-                        <thead>
-                            <tr>
-                                <th>Posición</th>
-                                <th>Rango de Apertura</th>
-                                <th>Ejemplos de Manos</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>UTG</td>
-                                <td>8-10%</td>
-                                <td>JJ+, AK, AQs</td>
-                            </tr>
-                            <tr>
-                                <td>MP</td>
-                                <td>12-15%</td>
-                                <td>99+, AJ+, KQ</td>
-                            </tr>
-                            <tr>
-                                <td>HJ</td>
-                                <td>18-20%</td>
-                                <td>77+, AT+, KJ+, QJs</td>
-                            </tr>
-                            <tr>
-                                <td>CO</td>
-                                <td>25-30%</td>
-                                <td>55+, A8+, KT+, Q10+, J10s</td>
-                            </tr>
-                            <tr>
-                                <td>BU</td>
-                                <td>40-50%</td>
-                                <td>22+, A2+, K8+, Q9+, J9+, T9s</td>
-                            </tr>
-                            <tr>
-                                <td>SB</td>
-                                <td>15-20%</td>
-                                <td>66+, A7+, K9+, Q10+, J10s</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="example">
-                        <strong>Nota:</strong> Estos rangos son una guía general y deben ajustarse según la dinámica de la mesa, los stacks y los perfiles de los oponentes.
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <div class="card-header">
-                    <h3>Acciones Preflop y Respuestas</h3>
-                </div>
-                <div class="card-body">
-                    <h4 style="margin: 1rem 0; color: var(--highlight);">Acciones Básicas Preflop</h4>
-                    
-                    <div class="action-buttons">
-                        <button class="action-btn active">Fold</button>
-                        <button class="action-btn">Call</button>
-                        <button class="action-btn">Raise</button>
-                        <button class="action-btn">3-Bet</button>
-                        <button class="action-btn">4-Bet</button>
-                    </div>
-                    
-                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Rangos de 3-Bet</h4>
-                    
-                    <table class="range-table">
-                        <thead>
-                            <tr>
-                                <th>Posición</th>
-                                <th>Rango de 3-Bet vs UTG</th>
-                                <th>Rango de 3-Bet vs CO/BU</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>UTG/MP</td>
-                                <td class="premium">QQ+, AK</td>
-                                <td class="strong">JJ+, AQ+</td>
-                            </tr>
-                            <tr>
-                                <td>HJ</td>
-                                <td class="strong">JJ+, AK</td>
-                                <td class="medium">TT+, AJ+, KQ</td>
-                            </tr>
-                            <tr>
-                                <td>CO</td>
-                                <td class="medium">TT+, AQ+</td>
-                                <td class="medium">99+, AT+, KJ+</td>
-                            </tr>
-                            <tr>
-                                <td>BU</td>
-                                <td class="medium">99+, AJ+, KQ</td>
-                                <td class="speculative">77+, A9+, KT+, QJ</td>
-                            </tr>
-                            <tr>
-                                <td>SB</td>
-                                <td class="medium">TT+, AQ+</td>
-                                <td class="speculative">88+, A8+, JT+</td>
-                            </tr>
-                            <tr>
-                                <td>BB</td>
-                                <td class="speculative">Defensa amplia</td>
-                                <td class="speculative">Defensa muy amplia</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h4 style="margin: 1.5rem 0 1rem 0; color: var(--highlight);">Resumen de Estrategia Preflop</h4>
-                    
-                    <div class="flow-container">
-                        <div class="flow-step">
-                            <h3><span>1</span> Manos Premium</h3>
-                            <p>Siempre abrir y re-subir. Estas son las manos más fuertes:</p>
-                            <ul>
-                                <li><span class="hand">A♠ A♣</span>, <span class="hand">K♠ K♣</span>, <span class="hand">Q♠ Q♣</span></li>
-                                <li><span class="hand">A♠ K♣</span> (off-suit y suited)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <h3><span>2</span> Manos Fuertes</h3>
-                            <p>Abrir desde cualquier posición, 3-bet desde posiciones tardías:</p>
-                            <ul>
-                                <li><span class="hand">J♠ J♣</span>, <span class="hand">T♠ T♣</span></li>
-                                <li><span class="hand">A♠ Q♣</span>, <span class="hand">A♠ J♣</span></li>
-                                <li><span class="hand">K♠ Q♣</span></li>
-                            </ul>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <h3><span>3</span> Manos Especulativas</h3>
-                            <p>Abrir desde posiciones tardías, call desde BB contra opens:</p>
-                            <ul>
-                                <li>Parejas pequeñas: <span class="hand">6♠ 6♣</span>, <span class="hand">5♠ 5♣</span></li>
-                                <li>Suited connectors: <span class="hand">8♠ 7♠</span>, <span class="hand">6♥ 5♥</span></li>
-                                <li>Suited aces: <span class="hand">A♠ 9♠</span>, <span class="hand">A♠ 5♠</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="example">
-                        <strong>Consejo clave:</strong> La posición es más importante que las cartas. Desde el Button puedes jugar muchas más manos que desde UTG.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="postflop" class="section" style="background-color: var(--secondary);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Tipos de Manos Postflop</h2>
-            </div>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-header">
-                        <h3><span class="badge badge-strong">F</span> Manos Fuertes</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Top Par con kicker "J" o mejor. Siempre apostamos con estas manos.</p>
-                        <ul>
-                            <li><span class="hand">A♦ Q♣</span> en <span class="board">A♣ 9♦ 3♠</span> - TP con kicker Q</li>
-                            <li><span class="hand">K♦ K♠</span> en <span class="board">7♥ 6♣ 2♦</span> - Overpair</li>
-                        </ul>
-                        <div class="example">
-                            <strong>Nota:</strong> El board determina si realmente es una mano fuerte. En <span class="board">A♠ 7♣ 4♦</span> con <span class="hand">A♦ Q♣</span>, no es fuerte porque hay posibles colores.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3><span class="badge badge-sd">SD</span> Manos de Showdown</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>TP débiles (kicker T o menor), segundas y terceras parejas. Jugamos Check-Call.</p>
-                        <ul>
-                            <li><span class="hand">K♥ J♥</span> en <span class="board">A♠ J♦ 6♥</span> - Segunda pareja</li>
-                            <li><span class="hand">K♦ K♠</span> en <span class="board">A♣ 8♠ 3♥</span> - Segunda pareja</li>
-                            <li><span class="hand">8♣ 8♥</span> en <span class="board">J♠ 7♣ 4♦</span> - Segunda pareja</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3><span class="badge badge-nothing">N</span> Absolutamente Nada</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Solo carta alta, proyectos o manos de SD muy débiles.</p>
-                        <ul>
-                            <li><span class="hand">A♦ J♥</span> en <span class="board">Q♣ 7♥ 4♠</span> - Carta alta As</li>
-                            <li><span class="hand">K♥ T♥</span> en <span class="board">J♠ 6♥ 2♥</span> - Carta alta + proyecto color</li>
-                            <li><span class="hand">2♠ 2♣</span> en <span class="board">K♠ J♥ 5♦</span> - Pareja baja</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Apuesta de Continuación (CB)</h2>
-            </div>
-            
-            <div class="flow-container">
-                <div class="flow-step">
-                    <h3><span>1</span> ¿Cuándo hacer CB?</h3>
-                    <p>Hacemos CB cuando tenemos una <strong>mano fuerte</strong> o cuando <strong>no tenemos absolutamente nada</strong> (CB de Bluff).</p>
-                </div>
-                
-                <div class="flow-step">
-                    <h3><span>2</span> CB de Bluff</h3>
-                    <p>Hacemos CB de Bluff cuando el flop es:</p>
-                    <ul>
-                        <li>AXX, KXX, QXX, JXX (carta alta visible)</li>
-                        <li>Monocolor (todas del mismo palo)</li>
-                        <li>Carta doblada (dos cartas iguales)</li>
-                        <li>Tenemos un proyecto de color o escalera</li>
-                    </ul>
-                    <div class="example">
-                        <strong>Ejemplos:</strong><br>
-                        - <span class="hand">K♠ Q♣</span> en <span class="board">J♦ 8♣ 5♥</span> → CB (JXX)<br>
-                        - <span class="hand">A♣ T♣</span> en <span class="board">9♣ 6♥ 2♣</span> → CB (proyecto color)<br>
-                        - <span class="hand">Q♠ J♥</span> en <span class="board">9♦ 9♣ 5♠</span> → CB (carta doblada)
-                    </div>
-                </div>
-                
-                <div class="flow-step">
-                    <h3><span>3</span> Tamaños de Apuesta</h3>
-                    <table class="strategy-table">
-                        <thead>
-                            <tr>
-                                <th>Situación</th>
-                                <th>Tamaño</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Se puede completar proyecto en siguiente calle</td>
-                                <td><span class="chip">2/3</span> a <span class="chip">3/4</span> del Pot</td>
-                            </tr>
-                            <tr>
-                                <td>No se puede completar proyecto</td>
-                                <td><span class="chip">1/2</span> a <span class="chip">2/3</span> del Pot</td>
-                            </tr>
-                            <tr>
-                                <td>Vs. recreacional (no foldea)</td>
-                                <td>Mínimo <span class="chip">3/4</span> del Pot</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="turn-river" class="section" style="background-color: var(--secondary);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Juego en el Turn y River</h2>
-            </div>
-            
-            <div class="flow-container">
-                <div class="flow-step">
-                    <h3><span>T</span> 2º Barrel en el Turn</h3>
-                    <p>Hacemos segunda apuesta en el Turn con:</p>
-                    <ul>
-                        <li>Nuestras manos fuertes que no empeoran</li>
-                        <li>Algunas manos de CB Bluff que ligan mano fuerte en Turn</li>
-                    </ul>
-                    <div class="example">
-                        <strong>Ejemplo:</strong><br>
-                        <span class="hand">K♠ Q♠</span> en <span class="board">J♦ 8♣ 4♠</span> - <span class="board">K♣</span> → 2º Barrel
-                    </div>
-                </div>
-                
-                <div class="flow-step">
-                    <h3><span>R</span> 3º Barrel en el River</h3>
-                    <p>Hacemos tercera apuesta en el River con:</p>
-                    <ul>
-                        <li>Nuestras manos fuertes si no se completa proyecto del rival</li>
-                    </ul>
-                    <div class="example">
-                        <strong>Ejemplo:</strong><br>
-                        <span class="hand">A♦ Q♠</span> en <span class="board">Q♣ T♦ 4♥</span> - <span class="board">6♣</span> - <span class="board">3♦</span> → 3º Barrel
-                    </div>
-                </div>
-                
-                <div class="flow-step">
-                    <h3><span>X</span> Cuándo Resignar</h3>
-                    <p>Jugamos Check-Fold cuando:</p>
-                    <ul>
-                        <li>Hicimos CB Bluff y no ligamos nada en Turn</li>
-                        <li>Nuestra mano se vuelve demasiado débil</li>
-                        <li>Se completan proyectos que nos superan</li>
-                    </ul>
-                    <div class="example">
-                        <strong>Ejemplo:</strong><br>
-                        <span class="hand">K♦ Q♠</span> en <span class="board">J♣ 6♣ 4♥</span> - <span class="board">7♥</span> → Resignamos
-                    </div>
+                    <p>Selecciona diferentes posiciones y acciones para ver cómo cambian los rangos recomendados. Puedes hacer clic en cualquier mano para ver sus detalles y estadísticas.</p>
                 </div>
             </div>
         </div>
@@ -932,8 +653,8 @@
                     <a href="#preflop">Preflop</a>
                     <a href="#postflop">Postflop</a>
                     <a href="#turn-river">Turn & River</a>
+                    <a href="#visualizador">Visualizador</a>
                     <a href="#calculadoras">Calculadoras</a>
-                    <a href="#blog">Blog</a>
                 </div>
                 <div class="copyright">
                     &copy; 2023 PokerStrategy Pro. Todos los derechos reservados.
@@ -943,77 +664,362 @@
     </footer>
 
     <script>
-        // Efecto de scroll suave para los enlaces
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Efecto de aparición para las tarjetas al hacer scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+        // Datos de rangos preflop por posición
+        const rangeData = {
+            UTG: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "AKs", "AQs", "AJs", "KQs", "AKo", "AQo"],
+                vs3bet: ["AA", "KK", "QQ", "AKs", "AQs", "AKo"],
+                vs4bet: ["AA", "KK", "AKs"],
+                call: ["JJ", "TT", "99", "AJs", "KQs", "AQo"],
+                "3bet": ["AA", "KK", "QQ", "AKs"],
+                "4bet": ["AA", "KK", "AKs"]
+            },
+            MP: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "AKs", "AQs", "AJs", "ATs", "KQs", "KJs", "AKo", "AQo", "AJo"],
+                vs3bet: ["AA", "KK", "QQ", "AKs", "AQs", "AJs", "AKo", "AQo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs"],
+                call: ["TT", "99", "88", "ATs", "KJs", "AJo", "KQo"],
+                "3bet": ["AA", "KK", "QQ", "AKs", "AQs"],
+                "4bet": ["AA", "KK", "QQ", "AKs"]
+            },
+            HJ: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "AKs", "AQs", "AJs", "ATs", "A9s", "KQs", "KJs", "KTs", "QJs", "AKo", "AQo", "AJo", "KQo"],
+                vs3bet: ["AA", "KK", "QQ", "JJ", "AKs", "AQs", "AJs", "AKo", "AQo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs", "AQs"],
+                call: ["TT", "99", "88", "77", "ATs", "A9s", "KTs", "QJs", "AJo", "KQo"],
+                "3bet": ["AA", "KK", "QQ", "JJ", "AKs", "AQs", "AJs"],
+                "4bet": ["AA", "KK", "QQ", "AKs", "AQs"]
+            },
+            CO: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "KQs", "KJs", "KTs", "QJs", "QTs", "JTs", "AKo", "AQo", "AJo", "KQo", "QJo"],
+                vs3bet: ["AA", "KK", "QQ", "JJ", "TT", "AKs", "AQs", "AJs", "AKo", "AQo", "AJo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs", "AQs"],
+                call: ["99", "88", "77", "66", "ATs", "A9s", "A8s", "KTs", "QTs", "JTs", "KQo", "QJo"],
+                "3bet": ["AA", "KK", "QQ", "JJ", "TT", "AKs", "AQs", "AJs", "ATs"],
+                "4bet": ["AA", "KK", "QQ", "AKs", "AQs"]
+            },
+            BU: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44", "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", "KQs", "KJs", "KTs", "K9s", "QJs", "QTs", "Q9s", "JTs", "J9s", "T9s", "98s", "AKo", "AQo", "AJo", "ATo", "KQo", "KJo", "QJo"],
+                vs3bet: ["AA", "KK", "QQ", "JJ", "TT", "99", "AKs", "AQs", "AJs", "ATs", "AKo", "AQo", "AJo", "ATo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs", "AQs"],
+                call: ["88", "77", "66", "55", "44", "A9s", "A8s", "A7s", "K9s", "Q9s", "J9s", "T9s", "98s", "KQo", "KJo", "QJo"],
+                "3bet": ["AA", "KK", "QQ", "JJ", "TT", "99", "AKs", "AQs", "AJs", "ATs", "A9s"],
+                "4bet": ["AA", "KK", "QQ", "AKs", "AQs"]
+            },
+            SB: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "KQs", "KJs", "KTs", "K9s", "QJs", "QTs", "Q9s", "JTs", "J9s", "T9s", "98s", "AKo", "AQo", "AJo", "ATo", "KQo"],
+                vs3bet: ["AA", "KK", "QQ", "JJ", "TT", "99", "AKs", "AQs", "AJs", "AKo", "AQo", "AJo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs", "AQs"],
+                call: ["88", "77", "66", "55", "ATs", "A9s", "A8s", "K9s", "Q9s", "J9s", "T9s", "98s", "ATo", "KQo"],
+                "3bet": ["AA", "KK", "QQ", "JJ", "TT", "99", "AKs", "AQs", "AJs", "ATs"],
+                "4bet": ["AA", "KK", "QQ", "AKs", "AQs"]
+            },
+            BB: {
+                open: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44", "33", "22", "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", "KQs", "KJs", "KTs", "K9s", "K8s", "QJs", "QTs", "Q9s", "JTs", "J9s", "T9s", "98s", "87s", "AKo", "AQo", "AJo", "ATo", "KQo", "KJo", "QJo"],
+                vs3bet: ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "AKs", "AQs", "AJs", "ATs", "AKo", "AQo", "AJo", "ATo"],
+                vs4bet: ["AA", "KK", "QQ", "AKs", "AQs"],
+                call: ["77", "66", "55", "44", "33", "22", "A9s", "A8s", "A7s", "A6s", "K8s", "Q9s", "J9s", "T9s", "98s", "87s", "KQo", "KJo", "QJo"],
+                "3bet": ["AA", "KK", "QQ", "JJ", "TT", "99", "88", "AKs", "AQs", "AJs", "ATs", "A9s"],
+                "4bet": ["AA", "KK", "QQ", "AKs", "AQs"]
+            }
         };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        // Aplicar a las tarjetas y pasos del flujo
-        document.querySelectorAll('.card, .flow-step, .position-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.5s, transform 0.5s';
-            observer.observe(el);
-        });
-        
-        // Resaltar la sección activa en la navegación
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('nav a');
+
+        // Categorías de manos para colores
+        const handCategories = {
+            premium: ["AA", "KK", "QQ", "AKs"],
+            strong: ["JJ", "TT", "AQs", "AJs", "KQs", "AKo"],
+            medium: ["99", "88", "ATs", "A9s", "KJs", "KTs", "QJs", "AQo", "AJo"],
+            speculative: ["77", "66", "A8s", "A7s", "K9s", "QTs", "Q9s", "JTs", "KQo"],
+            light: ["55", "44", "33", "22", "A6s", "A5s", "A4s", "A3s", "A2s", "K8s", "Q8s", "J9s", "T9s", "98s", "87s", "KJo", "QJo"]
+        };
+
+        // Inicializar el visualizador
+        document.addEventListener('DOMContentLoaded', function() {
+            const rangeGrid = document.getElementById('range-grid');
+            const positionSelect = document.getElementById('position');
+            const actionSelect = document.getElementById('action');
+            const rangePercentage = document.getElementById('range-percentage');
+            const percentageValue = document.getElementById('percentage-value');
+            const rangePercent = document.getElementById('range-percent');
+            const combosCount = document.getElementById('combos-count');
+            const handsCount = document.getElementById('hands-count');
+            const presetButtons = document.querySelectorAll('.preset-btn');
+            const selectAllBtn = document.getElementById('select-all');
+            const clearAllBtn = document.getElementById('clear-all');
+            const invertSelectionBtn = document.getElementById('invert-selection');
+            const handDetails = document.getElementById('hand-details');
             
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 100) {
-                    current = section.getAttribute('id');
+            let selectedHands = new Set();
+            let currentRange = [];
+            
+            // Crear la cuadrícula de manos
+            function createGrid() {
+                // Limpiar grid existente
+                while (rangeGrid.children.length > 1) {
+                    rangeGrid.removeChild(rangeGrid.lastChild);
                 }
+                
+                const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+                
+                // Crear filas
+                for (let i = 0; i < ranks.length; i++) {
+                    // Añadir celda de cabecera de fila
+                    const rowHeader = document.createElement('div');
+                    rowHeader.className = 'grid-header-cell';
+                    rowHeader.textContent = ranks[i];
+                    rangeGrid.appendChild(rowHeader);
+                    
+                    // Crear celdas para esta fila
+                    for (let j = 0; j < ranks.length; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell';
+                        
+                        if (i === j) {
+                            // Parejas
+                            cell.textContent = `${ranks[i]}${ranks[j]}`;
+                            cell.dataset.hand = `${ranks[i]}${ranks[j]}`;
+                        } else if (i < j) {
+                            // Manos suited
+                            cell.textContent = `${ranks[i]}${ranks[j]}s`;
+                            cell.dataset.hand = `${ranks[i]}${ranks[j]}s`;
+                        } else {
+                            // Manos offsuit
+                            cell.textContent = `${ranks[j]}${ranks[i]}o`;
+                            cell.dataset.hand = `${ranks[j]}${ranks[i]}o`;
+                        }
+                        
+                        // Asignar categoría y color
+                        assignHandCategory(cell);
+                        
+                        cell.addEventListener('click', function() {
+                            toggleHandSelection(this);
+                        });
+                        
+                        rangeGrid.appendChild(cell);
+                    }
+                }
+                
+                updateRangeDisplay();
+            }
+            
+            // Asignar categoría y color a una mano
+            function assignHandCategory(cell) {
+                const hand = cell.dataset.hand;
+                let category = 'light';
+                
+                for (const [cat, hands] of Object.entries(handCategories)) {
+                    if (hands.includes(hand)) {
+                        category = cat;
+                        break;
+                    }
+                }
+                
+                cell.classList.add(category);
+            }
+            
+            // Alternar selección de una mano
+            function toggleHandSelection(cell) {
+                const hand = cell.dataset.hand;
+                
+                if (selectedHands.has(hand)) {
+                    selectedHands.delete(hand);
+                    cell.classList.remove('selected');
+                } else {
+                    selectedHands.add(hand);
+                    cell.classList.add('selected');
+                }
+                
+                updateStats();
+                updateHandDetails(hand);
+            }
+            
+            // Actualizar estadísticas
+            function updateStats() {
+                const percent = ((selectedHands.size / 169) * 100).toFixed(1);
+                rangePercent.textContent = `${percent}%`;
+                combosCount.textContent = selectedHands.size * 6; // Aproximación
+                handsCount.textContent = selectedHands.size;
+            }
+            
+            // Actualizar detalles de la mano
+            function updateHandDetails(hand) {
+                if (!hand) return;
+                
+                handDetails.classList.add('active');
+                
+                // Actualizar cartas visuales
+                const card1 = document.getElementById('card1');
+                const card2 = document.getElementById('card2');
+                
+                const rank1 = hand[0];
+                const rank2 = hand[1];
+                const suited = hand.length > 2 && hand[2] === 's';
+                
+                card1.querySelector('.card-value').textContent = rank1;
+                card2.querySelector('.card-value').textContent = rank2;
+                
+                // Asignar palos y colores
+                if (suited) {
+                    card1.querySelector('.card-suit').textContent = '♠';
+                    card2.querySelector('.card-suit').textContent = '♠';
+                    card1.className = 'card-display black';
+                    card2.className = 'card-display black';
+                } else {
+                    card1.querySelector('.card-suit').textContent = '♠';
+                    card2.querySelector('.card-suit').textContent = '♥';
+                    card1.className = 'card-display black';
+                    card2.className = 'card-display red';
+                }
+                
+                // Actualizar tipo de mano
+                const handType = document.getElementById('hand-type');
+                if (rank1 === rank2) {
+                    handType.textContent = 'Pareja';
+                } else if (suited) {
+                    handType.textContent = 'Mano suited';
+                } else {
+                    handType.textContent = 'Mano offsuit';
+                }
+                
+                // Calcular equity (simulado)
+                const equity = Math.floor(Math.random() * 30) + 50; // 50-80%
+                document.getElementById('hand-equity').textContent = `${equity}%`;
+                document.querySelector('.equity-fill').style.width = `${equity}%`;
+            }
+            
+            // Actualizar rango según posición y acción
+            function updateRangeDisplay() {
+                const position = positionSelect.value;
+                const action = actionSelect.value;
+                
+                currentRange = rangeData[position]?.[action] || [];
+                
+                // Limpiar selecciones
+                selectedHands.clear();
+                const cells = document.querySelectorAll('.grid-cell');
+                cells.forEach(cell => cell.classList.remove('selected'));
+                
+                // Seleccionar manos del rango
+                currentRange.forEach(hand => {
+                    selectedHands.add(hand);
+                    const cell = document.querySelector(`.grid-cell[data-hand="${hand}"]`);
+                    if (cell) {
+                        cell.classList.add('selected');
+                    }
+                });
+                
+                updateStats();
+            }
+            
+            // Configurar eventos
+            positionSelect.addEventListener('change', updateRangeDisplay);
+            actionSelect.addEventListener('change', updateRangeDisplay);
+            
+            rangePercentage.addEventListener('input', function() {
+                const value = this.value;
+                percentageValue.textContent = `${value}%`;
+                
+                // Ajustar rango según porcentaje
+                adjustRangeByPercentage(value);
             });
             
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
+            // Botones de preajustes
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    presetButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const rangeValue = parseInt(this.dataset.range);
+                    rangePercentage.value = rangeValue;
+                    percentageValue.textContent = `${rangeValue}%`;
+                    
+                    if (rangeValue === 0) {
+                        // Limpiar todo
+                        selectedHands.clear();
+                        document.querySelectorAll('.grid-cell.selected').forEach(cell => {
+                            cell.classList.remove('selected');
+                        });
+                    } else {
+                        adjustRangeByPercentage(rangeValue);
+                    }
+                    
+                    updateStats();
+                });
+            });
+            
+            // Ajustar rango por porcentaje
+            function adjustRangeByPercentage(percentage) {
+                // Limpiar selecciones actuales
+                selectedHands.clear();
+                document.querySelectorAll('.grid-cell.selected').forEach(cell => {
+                    cell.classList.remove('selected');
+                });
+                
+                // Obtener todas las manos ordenadas por fuerza
+                const allHands = [];
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    allHands.push({
+                        hand: cell.dataset.hand,
+                        element: cell,
+                        category: Array.from(cell.classList).find(cls => 
+                            ['premium', 'strong', 'medium', 'speculative', 'light'].includes(cls)
+                        ) || 'light'
+                    });
+                });
+                
+                // Ordenar por categoría (premium primero)
+                const categoryOrder = { premium: 0, strong: 1, medium: 2, speculative: 3, light: 4 };
+                allHands.sort((a, b) => categoryOrder[a.category] - categoryOrder[b.category]);
+                
+                // Seleccionar el porcentaje de manos más fuertes
+                const handsToSelect = Math.floor((percentage / 100) * allHands.length);
+                
+                for (let i = 0; i < handsToSelect; i++) {
+                    const hand = allHands[i];
+                    selectedHands.add(hand.hand);
+                    hand.element.classList.add('selected');
                 }
+                
+                updateStats();
+            }
+            
+            // Botones de acción
+            selectAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    cell.classList.add('selected');
+                    selectedHands.add(cell.dataset.hand);
+                });
+                updateStats();
             });
-        });
-        
-        // Interactividad para los botones de acción
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+            
+            clearAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    cell.classList.remove('selected');
+                });
+                selectedHands.clear();
+                updateStats();
+                handDetails.classList.remove('active');
             });
+            
+            invertSelectionBtn.addEventListener('click', function() {
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    if (cell.classList.contains('selected')) {
+                        cell.classList.remove('selected');
+                        selectedHands.delete(cell.dataset.hand);
+                    } else {
+                        cell.classList.add('selected');
+                        selectedHands.add(cell.dataset.hand);
+                    }
+                });
+                updateStats();
+            });
+            
+            // Inicializar
+            createGrid();
+            updateRangeDisplay();
         });
     </script>
 </body>
 </html>
+
 
