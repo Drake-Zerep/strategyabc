@@ -191,11 +191,18 @@
             font-size: 1rem;
         }
         
+        .range-grid-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
         .range-grid {
             display: grid;
             grid-template-columns: repeat(13, 1fr);
-            gap: 2px;
-            margin: 2rem 0;
+            gap: 1px;
+            max-width: 600px;
+            width: 100%;
         }
         
         .grid-header {
@@ -208,10 +215,10 @@
             align-items: center;
             justify-content: center;
             background-color: var(--secondary);
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             position: relative;
         }
@@ -219,7 +226,7 @@
         .grid-cell:hover {
             transform: scale(1.1);
             z-index: 2;
-            box-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+            box-shadow: 0 0 8px rgba(233, 69, 96, 0.5);
         }
         
         .grid-cell.selected {
@@ -251,9 +258,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem;
+            padding: 0.3rem;
             font-weight: 600;
             color: var(--highlight);
+            font-size: 0.8rem;
         }
         
         .range-stats {
@@ -284,6 +292,7 @@
             display: flex;
             gap: 1rem;
             margin-top: 1rem;
+            flex-wrap: wrap;
         }
         
         .action-btn {
@@ -294,6 +303,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-size: 0.9rem;
         }
         
         .action-btn:hover {
@@ -346,14 +356,14 @@
         }
         
         .card-display {
-            width: 80px;
-            height: 112px;
+            width: 60px;
+            height: 84px;
             background-color: white;
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 0.5rem;
+            padding: 0.4rem;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
         
@@ -366,12 +376,12 @@
         }
         
         .card-value {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
         
         .card-suit {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             text-align: center;
         }
         
@@ -380,9 +390,9 @@
         }
         
         .equity-bar {
-            height: 20px;
+            height: 16px;
             background-color: var(--primary);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             margin-top: 0.5rem;
         }
@@ -390,7 +400,7 @@
         .equity-fill {
             height: 100%;
             background: linear-gradient(to right, var(--highlight), #ff7b9c);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: width 0.5s;
         }
         
@@ -454,6 +464,7 @@
             }
             
             .range-grid {
+                max-width: 500px;
                 grid-template-columns: repeat(13, 1fr);
                 gap: 1px;
             }
@@ -465,6 +476,24 @@
             .controls {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .range-actions {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .range-grid {
+                max-width: 400px;
+            }
+            
+            .grid-cell {
+                font-size: 0.5rem;
+            }
+            
+            .grid-header-cell {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -543,26 +572,28 @@
                     <button class="preset-btn" data-range="0">Limpiar</button>
                 </div>
                 
-                <div class="range-grid" id="range-grid">
-                    <!-- Grid headers -->
-                    <div class="grid-header">
-                        <div class="grid-header-cell"></div>
-                        <div class="grid-header-cell">A</div>
-                        <div class="grid-header-cell">K</div>
-                        <div class="grid-header-cell">Q</div>
-                        <div class="grid-header-cell">J</div>
-                        <div class="grid-header-cell">T</div>
-                        <div class="grid-header-cell">9</div>
-                        <div class="grid-header-cell">8</div>
-                        <div class="grid-header-cell">7</div>
-                        <div class="grid-header-cell">6</div>
-                        <div class="grid-header-cell">5</div>
-                        <div class="grid-header-cell">4</div>
-                        <div class="grid-header-cell">3</div>
-                        <div class="grid-header-cell">2</div>
+                <div class="range-grid-container">
+                    <div class="range-grid" id="range-grid">
+                        <!-- Grid headers -->
+                        <div class="grid-header">
+                            <div class="grid-header-cell"></div>
+                            <div class="grid-header-cell">A</div>
+                            <div class="grid-header-cell">K</div>
+                            <div class="grid-header-cell">Q</div>
+                            <div class="grid-header-cell">J</div>
+                            <div class="grid-header-cell">T</div>
+                            <div class="grid-header-cell">9</div>
+                            <div class="grid-header-cell">8</div>
+                            <div class="grid-header-cell">7</div>
+                            <div class="grid-header-cell">6</div>
+                            <div class="grid-header-cell">5</div>
+                            <div class="grid-header-cell">4</div>
+                            <div class="grid-header-cell">3</div>
+                            <div class="grid-header-cell">2</div>
+                        </div>
+                        
+                        <!-- Grid cells will be generated by JavaScript -->
                     </div>
-                    
-                    <!-- Grid cells will be generated by JavaScript -->
                 </div>
                 
                 <div class="range-stats">
@@ -1021,5 +1052,4 @@
     </script>
 </body>
 </html>
-
 
