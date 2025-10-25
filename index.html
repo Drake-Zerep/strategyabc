@@ -237,33 +237,16 @@
             background-color: var(--highlight);
         }
         
-        .grid-cell.premium {
-            background-color: #4CAF50;
-        }
-        
-        .grid-cell.strong {
-            background-color: #8BC34A;
-        }
-        
-        .grid-cell.medium {
-            background-color: #FFC107;
-            color: #333;
-        }
-        
-        .grid-cell.speculative {
-            background-color: #FF9800;
-        }
-        
-        .grid-cell.light {
-            background-color: #FF5722;
-        }
-        
         .grid-cell.blue-dark {
             background-color: var(--blue-dark);
         }
         
         .grid-cell.orange {
             background-color: var(--orange);
+        }
+        
+        .grid-cell.red {
+            background-color: var(--danger);
         }
         
         .grid-header-cell {
@@ -299,55 +282,6 @@
         .stat-label {
             font-size: 0.9rem;
             color: #aaa;
-        }
-        
-        .range-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 0.5rem 1rem;
-            background-color: var(--accent);
-            border: none;
-            color: var(--text);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .action-btn:hover {
-            background-color: var(--highlight);
-        }
-        
-        .preset-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .preset-btn {
-            padding: 0.4rem 0.8rem;
-            background-color: var(--secondary);
-            border: 1px solid var(--accent);
-            color: var(--text);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-        
-        .preset-btn:hover {
-            background-color: var(--accent);
-        }
-        
-        .preset-btn.active {
-            background-color: var(--highlight);
-            border-color: var(--highlight);
         }
         
         .hand-details {
@@ -490,10 +424,6 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
-            .range-actions {
-                justify-content: center;
-            }
         }
         
         @media (max-width: 480px) {
@@ -572,7 +502,6 @@
                     <div class="control-group">
                         <label for="vs-position">Vs Posición</label>
                         <select id="vs-position">
-                            <option value="any">Cualquiera</option>
                             <option value="UTG-MP">UTG-MP</option>
                             <option value="CO-BU">CO-BU</option>
                         </select>
@@ -632,32 +561,20 @@
                 <div class="card-body">
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #4CAF50; border-radius: 3px;"></div>
-                            <span>Manos Premium</span>
+                            <div style="width: 20px; height: 20px; background-color: var(--highlight); border-radius: 3px;"></div>
+                            <span>Open Raise (OR)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #8BC34A; border-radius: 3px;"></div>
-                            <span>Manos Fuertes</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #FFC107; border-radius: 3px;"></div>
-                            <span>Manos Medias</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #FF9800; border-radius: 3px;"></div>
-                            <span>Manos Especulativas</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #FF5722; border-radius: 3px;"></div>
-                            <span>Manos Marginales</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #1565C0; border-radius: 3px;"></div>
+                            <div style="width: 20px; height: 20px; background-color: var(--blue-dark); border-radius: 3px;"></div>
                             <span>Call vs 3Bet / Cold Call</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background-color: #FF9800; border-radius: 3px;"></div>
-                            <span>4Bet / 3Bet Valor</span>
+                            <div style="width: 20px; height: 20px; background-color: var(--orange); border-radius: 3px;"></div>
+                            <span>4Bet / 3Bet por Valor</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background-color: var(--danger); border-radius: 3px;"></div>
+                            <span>4Bet Bluff</span>
                         </div>
                     </div>
                     <p>Selecciona diferentes posiciones y acciones para ver cómo cambian los rangos recomendados. Puedes hacer clic en cualquier mano para ver sus detalles y estadísticas.</p>
@@ -686,137 +603,115 @@
     </footer>
 
     <script>
-        // Rangos completos basados en la información proporcionada
+        // Función para expandir rangos como "22+", "A2s+", etc.
+        function expandRange(rangeStr) {
+            const hands = new Set();
+            const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+            
+            // Procesar cada parte del rango
+            const parts = rangeStr.split(', ');
+            
+            parts.forEach(part => {
+                if (part.includes('+')) {
+                    // Rango con "+" como "22+", "A2s+", etc.
+                    const base = part.replace('+', '');
+                    const rank1 = base[0];
+                    const rank2 = base[1];
+                    const isSuited = base.includes('s');
+                    const isOffsuit = base.includes('o');
+                    
+                    if (rank1 === rank2) {
+                        // Parejas como "22+"
+                        const startIndex = ranks.indexOf(rank1);
+                        for (let i = startIndex; i >= 0; i--) {
+                            hands.add(ranks[i] + ranks[i]);
+                        }
+                    } else if (isSuited) {
+                        // Suited como "A2s+"
+                        const startIndex = ranks.indexOf(rank2);
+                        for (let i = startIndex; i < ranks.length; i++) {
+                            if (ranks[i] !== rank1) {
+                                hands.add(rank1 + ranks[i] + 's');
+                            }
+                        }
+                    } else if (isOffsuit) {
+                        // Offsuit como "A2o+"
+                        const startIndex = ranks.indexOf(rank2);
+                        for (let i = startIndex; i < ranks.length; i++) {
+                            if (ranks[i] !== rank1) {
+                                hands.add(rank1 + ranks[i] + 'o');
+                            }
+                        }
+                    }
+                } else if (part.includes('-')) {
+                    // Rango como "AQs-AJs"
+                    const [start, end] = part.split('-');
+                    const startRank1 = start[0];
+                    const startRank2 = start[1];
+                    const endRank1 = end[0];
+                    const endRank2 = end[1];
+                    const isSuited = start.includes('s');
+                    
+                    if (startRank1 === endRank1) {
+                        // Mismo rango principal como "AQs-AJs"
+                        const startIndex = ranks.indexOf(startRank2);
+                        const endIndex = ranks.indexOf(endRank2);
+                        for (let i = startIndex; i <= endIndex; i++) {
+                            if (ranks[i] !== startRank1) {
+                                hands.add(startRank1 + ranks[i] + (isSuited ? 's' : 'o'));
+                            }
+                        }
+                    }
+                } else {
+                    // Mano individual
+                    hands.add(part);
+                }
+            });
+            
+            return Array.from(hands);
+        }
+
+        // Rangos basados en la información proporcionada
         const rangeData = {
             UTG: {
-                OR: [
-                    // Parejas
-                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
-                    // Suited
-                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
-                    "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
-                    "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
-                    "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
-                    "T6s", "T7s", "T8s", "T9s",
-                    "96s", "97s", "98s",
-                    "86s", "87s",
-                    "76s", "65s", "54s",
-                    // Offsuit
-                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
-                    "K2o", "K3o", "K4o", "K5o", "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
-                    "Q6o", "Q7o", "Q8o", "Q9o", "QTo", "QJo",
-                    "J8o", "J9o", "JTo",
-                    "T8o", "T9o",
-                    "98o", "87o", "76o"
-                ],
-                Call3Bet: ["99", "TT", "JJ", "AQs", "AJs", "AKo"],
+                OR: expandRange("22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s, A2o+, K2o+, Q6o+, J8o+, T8o+, 98o, 87o, 76o"),
+                Call3Bet: expandRange("99+, AQs-AJs, AKo"),
                 "4Bet": ["AA", "KK", "AKs", "AKo"],
-                "4BetBluff": ["ATo", "KJo"]
+                "4BetBluff": ["ATo"] // Eligiendo ATo como 4Bet Bluff
             },
             MP: {
-                OR: [
-                    // Parejas
-                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
-                    // Suited
-                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
-                    "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
-                    "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
-                    "J7s", "J8s", "J9s", "JTs",
-                    "T7s", "T8s", "T9s",
-                    "97s", "98s",
-                    "87s", "76s", "65s", "54s",
-                    // Offsuit
-                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
-                    "K5o", "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
-                    "Q8o", "Q9o", "QTo", "QJo",
-                    "J9o", "JTo",
-                    "T9o", "98o", "87o"
-                ],
-                Call3Bet: ["88", "99", "TT", "JJ", "AQo", "AJs", "KQs"],
+                OR: expandRange("22+, A2s+, K2s+, Q4s+, J7s+, T7s+, 97s+, 87s, 76s, 65s, 54s, A2o+, K5o+, Q8o+, J9o+, T9o, 98o, 87o"),
+                Call3Bet: expandRange("88+, AQo+, AJs+, KQs"),
                 "4Bet": ["AA", "KK", "QQ", "AKs", "AKo"],
-                "4BetBluff": ["ATo", "KJo"]
+                "4BetBluff": ["KJo"] // Eligiendo KJo como 4Bet Bluff
             },
             CO: {
-                OR: [
-                    // Parejas
-                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
-                    // Suited
-                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
-                    "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
-                    "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
-                    "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
-                    "T6s", "T7s", "T8s", "T9s",
-                    "96s", "97s", "98s",
-                    "86s", "87s",
-                    "76s", "65s", "54s",
-                    // Offsuit
-                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
-                    "K8o", "K9o", "KTo", "KJo", "KQo",
-                    "Q8o", "Q9o", "QTo", "QJo",
-                    "J9o", "JTo",
-                    "T9o", "98o", "87o"
-                ],
-                Call3Bet: ["77", "88", "99", "TT", "ATs", "KQs", "QJs", "AJo", "KQo", "JTs", "T9s", "98s"],
+                OR: expandRange("22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 96s+, 86s+, 76s, 65s, 54s, A2o+, K8o+, Q8o+, J9o+, T9o, 98o, 87o"),
+                Call3Bet: expandRange("77+, ATs+, KQs, QJs, AJo+, KQo, JTs, T9s, 98s"),
                 "4Bet": ["AA", "KK", "QQ", "AKs", "AKo"],
-                "4BetBluff": ["KJo", "ATo"]
+                "4BetBluff": ["KJo"] // Eligiendo KJo como 4Bet Bluff
             },
             BU: {
-                OR: [
-                    // Parejas
-                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
-                    // Suited
-                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
-                    "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
-                    "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
-                    "J2s", "J3s", "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
-                    "T2s", "T3s", "T4s", "T5s", "T6s", "T7s", "T8s", "T9s",
-                    "95s", "96s", "97s", "98s",
-                    "85s", "86s", "87s",
-                    "75s", "76s", "77s",
-                    "65s", "54s",
-                    // Offsuit
-                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
-                    "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
-                    "Q8o", "Q9o", "QTo", "QJo",
-                    "J9o", "JTo",
-                    "T9o", "98o", "87o", "76o"
-                ],
-                Call3Bet: ["66", "77", "88", "99", "TT", "ATs", "A5s", "KTs", "QTs", "JTs", "T9s", "98s", "AJo", "KQo", "QJs"],
+                OR: expandRange("22+, A2s+, K2s+, Q2s+, J2s+, T2s+, 95s+, 85s+, 75s+, 65s, 54s, A2o+, K6o+, Q8o+, J9o+, T9o, 98o, 87o, 76o"),
+                Call3Bet: expandRange("66+, ATs+, A5s, KTs+, QTs+, JTs, T9s, 98s, AJo+, KQo, QJs"),
                 "4Bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs"],
-                "4BetBluff": ["KJo", "ATo"]
+                "4BetBluff": ["ATo"] // Eligiendo ATo como 4Bet Bluff
             },
             SB: {
-                OR: [
-                    // Mismo rango que BU
-                    "22", "33", "44", "55", "66", "77", "88", "99", "TT", "JJ", "QQ", "KK", "AA",
-                    "A2s", "A3s", "A4s", "A5s", "A6s", "A7s", "A8s", "A9s", "ATs", "AJs", "AQs", "AKs",
-                    "K2s", "K3s", "K4s", "K5s", "K6s", "K7s", "K8s", "K9s", "KTs", "KJs", "KQs",
-                    "Q2s", "Q3s", "Q4s", "Q5s", "Q6s", "Q7s", "Q8s", "Q9s", "QTs", "QJs",
-                    "J2s", "J3s", "J4s", "J5s", "J6s", "J7s", "J8s", "J9s", "JTs",
-                    "T2s", "T3s", "T4s", "T5s", "T6s", "T7s", "T8s", "T9s",
-                    "95s", "96s", "97s", "98s",
-                    "85s", "86s", "87s",
-                    "75s", "76s", "77s",
-                    "65s", "54s",
-                    "A2o", "A3o", "A4o", "A5o", "A6o", "A7o", "A8o", "A9o", "ATo", "AJo", "AQo", "AKo",
-                    "K6o", "K7o", "K8o", "K9o", "KTo", "KJo", "KQo",
-                    "Q8o", "Q9o", "QTo", "QJo",
-                    "J9o", "JTo",
-                    "T9o", "98o", "87o", "76o"
-                ],
-                Call3Bet: ["66", "77", "88", "99", "TT", "ATs", "A5s", "KTs", "QTs", "JTs", "T9s", "98s", "AJo", "KQo", "QJs"],
+                // SB usa el mismo rango que BU
+                OR: expandRange("22+, A2s+, K2s+, Q2s+, J2s+, T2s+, 95s+, 85s+, 75s+, 65s, 54s, A2o+, K6o+, Q8o+, J9o+, T9o, 98o, 87o, 76o"),
+                Call3Bet: expandRange("66+, ATs+, A5s, KTs+, QTs+, JTs, T9s, 98s, AJo+, KQo, QJs"),
                 "4Bet": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs"],
-                "4BetBluff": ["KJo", "ATo"]
+                "4BetBluff": ["ATo"]
             },
             BB: {
-                // Para BB, usaremos los rangos de 3Bet y Cold Call basados en la posición del atacante
                 "3BetValue": {
-                    "UTG-MP": ["AA", "KK", "QQ", "AKs", "AKo", "AQs", "AJs", "KQs", "JJ", "TT"],
-                    "CO-BU": ["AA", "KK", "QQ", "JJ", "AKs", "AKo", "AQs", "KQs"]
+                    "UTG-MP": expandRange("AA, KK, QQ, AKs, AKo, AQs, AJs, KQs, JJ, TT"),
+                    "CO-BU": expandRange("AA, KK, QQ, JJ, AKs, AKo, AQs, KQs")
                 },
                 "ColdCall": {
-                    "UTG-MP": ["99", "88", "77", "AJs", "KJs", "QJs", "JTs", "T9s", "98s"],
-                    "CO-BU": ["TT", "99", "88", "77", "AJs", "ATs", "KJs", "QJs", "JTs", "T9s", "98s", "87s", "76s", "65s"]
+                    "UTG-MP": expandRange("99, 88, 77, AJs, KJs, QJs, JTs, T9s, 98s"),
+                    "CO-BU": expandRange("TT, 99, 88, 77, AJs, ATs, KJs, QJs, JTs, T9s, 98s, 87s, 76s, 65s")
                 }
             }
         };
@@ -833,7 +728,6 @@
             const handDetails = document.getElementById('hand-details');
             
             let selectedHands = new Set();
-            let currentRange = [];
             
             // Crear la cuadrícula de manos
             function createGrid() {
@@ -972,8 +866,8 @@
                 selectedHands.clear();
                 const cells = document.querySelectorAll('.grid-cell');
                 cells.forEach(cell => {
-                    cell.classList.remove('selected');
-                    cell.className = 'grid-cell'; // Reset classes
+                    cell.classList.remove('selected', 'blue-dark', 'orange', 'red');
+                    cell.style.backgroundColor = '';
                 });
                 
                 // Obtener el rango correspondiente
@@ -984,8 +878,6 @@
                 } else {
                     range = rangeData[position][action] || [];
                 }
-                
-                currentRange = range;
                 
                 // Seleccionar manos del rango y aplicar colores
                 range.forEach(hand => {
@@ -1000,65 +892,43 @@
                         } else if (action === "4Bet" || action === "3BetValue") {
                             cell.classList.add('orange');
                         } else if (action === "4BetBluff") {
-                            cell.classList.add('light');
-                        } else {
-                            // Para OR, aplicar colores basados en fuerza de mano
-                            assignHandCategory(cell);
+                            cell.classList.add('red');
                         }
+                        // Para OR, se mantiene el color por defecto (highlight)
                     }
                 });
                 
                 updateStats();
             }
             
-            // Asignar categoría y color a una mano (para OR)
-            function assignHandCategory(cell) {
-                const hand = cell.dataset.hand;
-                
-                // Manos premium
-                const premiumHands = ["AA", "KK", "QQ", "AKs"];
-                // Manos fuertes
-                const strongHands = ["JJ", "TT", "AQs", "AJs", "KQs", "AKo"];
-                // Manos medias
-                const mediumHands = ["99", "88", "ATs", "A9s", "KJs", "KTs", "QJs", "AQo", "AJo"];
-                // Manos especulativas
-                const speculativeHands = ["77", "66", "A8s", "A7s", "K9s", "QTs", "Q9s", "JTs", "KQo"];
-                
-                if (premiumHands.includes(hand)) {
-                    cell.classList.add('premium');
-                } else if (strongHands.includes(hand)) {
-                    cell.classList.add('strong');
-                } else if (mediumHands.includes(hand)) {
-                    cell.classList.add('medium');
-                } else if (speculativeHands.includes(hand)) {
-                    cell.classList.add('speculative');
-                } else {
-                    cell.classList.add('light');
-                }
-            }
-            
             // Configurar eventos
             positionSelect.addEventListener('change', function() {
                 // Mostrar/ocultar selector de vs-position para BB
                 if (this.value === "BB") {
-                    vsPositionSelect.style.display = 'block';
-                    document.querySelector('.control-group:nth-child(3) label').style.display = 'block';
+                    vsPositionSelect.parentElement.style.display = 'flex';
                 } else {
-                    vsPositionSelect.style.display = 'none';
-                    document.querySelector('.control-group:nth-child(3) label').style.display = 'none';
+                    vsPositionSelect.parentElement.style.display = 'none';
                 }
                 updateRangeDisplay();
             });
             
-            actionSelect.addEventListener('change', updateRangeDisplay);
+            actionSelect.addEventListener('change', function() {
+                // Para BB, mostrar vs-position solo para 3BetValue y ColdCall
+                if (positionSelect.value === "BB" && (this.value === "3BetValue" || this.value === "ColdCall")) {
+                    vsPositionSelect.parentElement.style.display = 'flex';
+                } else if (positionSelect.value === "BB") {
+                    vsPositionSelect.parentElement.style.display = 'none';
+                }
+                updateRangeDisplay();
+            });
+            
             vsPositionSelect.addEventListener('change', updateRangeDisplay);
             
             // Inicializar
             createGrid();
             
             // Ocultar vs-position inicialmente (excepto para BB)
-            vsPositionSelect.style.display = 'none';
-            document.querySelector('.control-group:nth-child(3) label').style.display = 'none';
+            vsPositionSelect.parentElement.style.display = 'none';
         });
     </script>
 </body>
